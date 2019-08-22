@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.morty.mapper.ManagerMapper">
+
+    <resultMap id="resultMap" type="com.morty.entity.ManagerEntity">
+        <result column="manager_id" property="managerId"/>
+        <result column="manager_name" property="managerName"/>
+        <result column="manager_nickname" property="managerNickname"/>
+        <result column="manager_password" property="managerPassword"/>
+        <result column="manager_time" property="managerTime"/>
+    </resultMap>
+
+    <select id="list" resultMap="resultMap">
+        select * from manager m
+        <where>
+            <if test="managerId != null">and m.manager_id = #{managerId}</if>
+            <if test="managerName != null">and m.manager_name = #{managerName}</if>
+            <if test="managerNickname != null">and m.manager_nickname = #{managerNickname}</if>
+        </where>
+    </select>
+    <select id="getEntity" resultMap="resultMap">
+        select * from manager m
+        <where>
+            <if test="managerId != null">and m.manager_id = #{managerId}</if>
+            <if test="managerName != null">and m.manager_name = #{managerName}</if>
+            <if test="managerNickname != null">and m.manager_nickname = #{managerNickname}</if>
+        </where>
+    </select>
+</mapper>

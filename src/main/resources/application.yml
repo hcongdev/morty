@@ -1,0 +1,24 @@
+server:
+  servlet:
+    context-path: /morty
+  port: 8181
+spring:
+  profiles:
+    active: dev
+  mvc:
+    view:
+      prefix: .html
+  resources:
+    static-locations: classpath:/templates/*
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      #热部署生效
+      enabled: false
+      #设置重启的目录
+      additional-paths: src/main/,static/**,templates/**
+      #该目录下的内容修改不重启
+      exclude: data/**
+
+
