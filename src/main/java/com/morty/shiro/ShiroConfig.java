@@ -33,7 +33,6 @@ public class ShiroConfig {
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         // 开放登陆接口
         filterChainDefinitionMap.put("/login.do", "anon");
-        filterChainDefinitionMap.put("/list.do", "anon");
         filterChainDefinitionMap.put("/checkLogin.do", "anon");
         // <!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         filterChainDefinitionMap.put("/**", "authc");
