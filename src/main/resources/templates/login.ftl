@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="comment/comment_header :: common_header">
+<html>
+<head>
     <meta charset="UTF-8">
     <title>后台登录</title>
+    <#include "/comment/comment_header.ftl">
 </head>
 <body>
     <div id="login">

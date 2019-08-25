@@ -20,5 +20,14 @@ spring:
       additional-paths: src/main/,static/**,templates/**
       #该目录下的内容修改不重启
       exclude: data/**
-
-
+  freemarker:
+    suffix: .ftl
+    templateEncoding: UTF-8
+    templateLoaderPath: classpath:/templates/
+    charset: UTF-8
+    content-type: text/html;charset=UTF-8
+    default_encoding: UTF-8
+    cache: false
+    expose-session-attributes: true
+    # 设置上下文路径
+    request-context-attribute: request

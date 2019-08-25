@@ -1,5 +1,5 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="common_header">
+<html>
+<head>
     <!--vue-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- 引入样式 -->

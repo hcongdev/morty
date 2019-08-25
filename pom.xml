@@ -50,10 +50,6 @@
             <version>2.1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
         <!--   热部署     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,7 +57,11 @@
             <optional>true</optional>
             <scope>true</scope>
         </dependency>
-
+        <!--添加freemarker模板页面-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
