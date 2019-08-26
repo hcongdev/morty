@@ -8,5 +8,8 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <!--axios-->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css"  href="${request.contextPath}/static/css/comment.css"/>
+    <#-- iconfont-->
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1126314_3xlr4xzucq3.css">
 </head>
 </html>
