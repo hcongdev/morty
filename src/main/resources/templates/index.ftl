@@ -36,7 +36,7 @@
 
 
             <el-container>
-                <el-aside width="200px">
+                <el-aside :class="[isCollapse ? 'collapseLength' :'nocollapseLength'] " style="min-height: 743px;">
                 <!--侧边导航开始-->
                     <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
                          <el-radio-button :label="false">展开</el-radio-button>
@@ -66,12 +66,10 @@
                  </el-aside>
                  <!-- 侧边导航结束-->
 
-
                 <el-container>
                     <el-main>
-                        <iframe :src="url"></iframe>
+                        <iframe class="iframe-class" :src="url"></iframe>
                     </el-main>
-                    <el-footer>Footer</el-footer>
                 </el-container>
             </el-container>
         </el-container>
@@ -101,7 +99,8 @@
             },
             //打开iframe
             openIframe:function(url){
-                this.src = url;
+               this.url =  "${request.contextPath}/" + url;
+               console.log(this.url);
             },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
@@ -132,5 +131,24 @@
         align-items: center;
         overflow: hidden;
     }
-
+    .el-menu{
+        height: 100%;
+    }
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+        width: 200px;
+    }
+    ..el-aside:not(.el-menu--collapse) {
+        width: 200px;
+    }
+    .collapseLength{
+        width: 65px !important;
+    }
+    .nocollapseLength{
+        width: 201px !important;
+    }
+    .iframe-class{
+        width: 100%;
+        height: 100%;
+        border-width: 0px;
+    }
 </style>

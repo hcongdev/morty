@@ -10,6 +10,6 @@ public class RoleController {
 
     @GetMapping("/role")
     public String role(){
-        return "role";
+        return "role/role";
     }
 }
