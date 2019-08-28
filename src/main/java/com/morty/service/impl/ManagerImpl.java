@@ -1,5 +1,6 @@
 package com.morty.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.morty.entity.ManagerEntity;
 import com.morty.mapper.ManagerMapper;
 import com.morty.service.ManagerService;
@@ -8,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class ManagerImpl implements ManagerService {
+@Service("managerService")
+public class ManagerImpl extends ServiceImpl<ManagerMapper,ManagerEntity> implements ManagerService {
 
     @Autowired
     private ManagerMapper managerMapper;
@@ -21,17 +22,7 @@ public class ManagerImpl implements ManagerService {
 
     @Override
     public List<ManagerEntity> list(ManagerEntity managerEntity) {
-        return managerMapper.list(managerEntity);
-    }
-
-    @Override
-    public boolean del(int id) {
-        return false;
-    }
-
-    @Override
-    public boolean update(ManagerEntity managerEntity) {
-        return false;
+        return baseMapper.list(managerEntity);
     }
 
     @Override

@@ -1,12 +1,14 @@
 package com.morty.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.morty.entity.ManagerEntity;
+import com.morty.entity.MenuEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ManagerService {
+public interface ManagerService extends IService<ManagerEntity> {
     /**
      * 保存
      * @param managerEntity
@@ -21,20 +23,6 @@ public interface ManagerService {
      * @return 查询实体集合
      */
     List<ManagerEntity> list(ManagerEntity managerEntity);
-
-    /**
-     * 删除
-     * @param id
-     * @return
-     */
-    boolean del(int id);
-
-    /**
-     * 修改
-     * @param managerEntity
-     * @return
-     */
-    boolean update(ManagerEntity managerEntity);
 
     ManagerEntity getEntity(ManagerEntity managerEntity);
 }

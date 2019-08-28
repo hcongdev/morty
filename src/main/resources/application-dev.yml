@@ -8,5 +8,5 @@ spring:
 logging:
   level:
     com.morty: trace
-mybatis:
-  mapper-locations: classpath:mapping/*.xml
+mybatis-plus:
+  mapper-locations: classpath*:/mapping/*.xml

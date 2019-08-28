@@ -1,15 +1,23 @@
 package com.morty.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.util.Date;
 
 /**
  * 管理员实体
  */
-
+@Data
+@TableName("manager")
 public class ManagerEntity {
+
+    private static final long serialVersionUID = 1L;
     /**
      * 管理员编号
      */
+    @TableId
     private String managerId;
 
     /**
@@ -37,43 +45,5 @@ public class ManagerEntity {
      */
     private Date managerTime;
 
-    public String getManagerId() {
-        return managerId;
-    }
 
-    public void setManagerId(String managerId) {
-        this.managerId = managerId;
-    }
-
-    public String getManagerName() {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName) {
-        this.managerName = managerName;
-    }
-
-    public String getManagerNickname() {
-        return managerNickname;
-    }
-
-    public void setManagerNickname(String managerNickname) {
-        this.managerNickname = managerNickname;
-    }
-
-    public String getManagerPassword() {
-        return managerPassword;
-    }
-
-    public void setManagerPassword(String managerPassword) {
-        this.managerPassword = managerPassword;
-    }
-
-    public Date getManagerTime() {
-        return managerTime;
-    }
-
-    public void setManagerTime(Date managerTime) {
-        this.managerTime = managerTime;
-    }
 }

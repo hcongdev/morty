@@ -1,5 +1,6 @@
 package com.morty.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.morty.entity.ManagerEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
@@ -7,8 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Mapper
-@Component("managerMapper")
-public interface ManagerMapper {
+public interface ManagerMapper extends BaseMapper<ManagerEntity> {
 
     /**
      * 查询
