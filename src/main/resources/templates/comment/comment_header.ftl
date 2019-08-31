@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" type="text/css"  href="${request.contextPath}/static/css/comment.css"/>
     <#-- iconfont-->
-    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1126314_3xlr4xzucq3.css">
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1369349_snbqwidlqo8.css">
     <script>
         //axois拦截，只返回data参数
         axios.interceptors.response.use(res => {

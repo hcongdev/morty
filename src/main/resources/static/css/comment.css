@@ -1,6 +1,8 @@
 html,
 body{
     margin: 0px;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 [v-cloak] {
     display: none;

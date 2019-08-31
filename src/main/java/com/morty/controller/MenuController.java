@@ -17,6 +17,13 @@ public class MenuController {
     private MenuService menuService;
 
     /**
+     * 菜单管理页面
+     */
+    @RequestMapping("/index")
+    public String login(){
+        return "/menu/index";
+    }
+    /**
      * 查询菜单列表
      * @return
      */

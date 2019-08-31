@@ -38,41 +38,25 @@
             <el-container>
                 <el-aside :class="[isCollapse ? 'collapseLength' :'nocollapseLength'] " style="min-height: 743px;">
                 <!--侧边导航开始-->
-                    <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-                         <el-radio-button :label="false">展开</el-radio-button>
-                         <el-radio-button :label="true">收起</el-radio-button>
-                     </el-radio-group>-->
                      <el-menu
                              default-active="2"
                              class="el-menu-vertical-demo"
                              @open="handleOpen"
-                             @close="handleClose"
                              background-color="#545c64"
                              text-color="#fff"
                              active-text-color="#ffd04b"
                              :collapse="isCollapse"
+                             unique-opened="true"
                              >
-                         <el-submenu :index="menu.menuId+''" :data-index="menu.menuId+''" v-for="(menu,i) in menuList" :key='i'>
+                         <el-submenu :index="menu.menuId+''" :data-index="menu.menuId+''" v-for="(menu,i) in parentMenuList" :key='i'>
                              <template slot="title">
-                                 <i class='ms-admin-icon iconfont' v-html="menu.menuIcon"></i>
+                                 <i class="iconfont" v-html="menu.menuIcon"></i>
                                  <span v-text="menu.menuName"></span>
                              </template>
                              <!-- 子菜单 -->
                              <el-menu-item :index="sub.menuId+''" :data-index="sub.menuId" v-for="(sub,index) in getSubMenu(menu.menuId)"
-                                           :key='sub.menuParentId' v-text="sub.menuName" @click.self='openIframe(sub.menuUrl)'></el-menu-item>
+                                           :key='sub.menuId' v-text="sub.menuName" @click.self='openIframe(sub.menuUrl)'></el-menu-item>
                          </el-submenu>
-
-
-<#--                         <el-submenu index="1">-->
-<#--                             <template slot="title">-->
-<#--                                 <i class="el-icon-location"></i>-->
-<#--                                 <span slot="title">系统管理</span>-->
-<#--                             </template>-->
-<#--                             <el-menu-item-group>-->
-<#--                                 <el-menu-item index="1-1" @click="openIframe('admin')">管理员管理</el-menu-item>-->
-<#--                                 <el-menu-item index="1-2" @click="openIframe('role')">角色管理</el-menu-item>-->
-<#--                             </el-menu-item-group>-->
-<#--                         </el-submenu>-->
                      </el-menu>
                  </el-aside>
                  <!-- 侧边导航结束-->
@@ -93,7 +77,17 @@
             isCollapse: true,
             activeIndex2: '1',
             url:"",
-            menuList:{}, //菜单集合
+            menuList:[], //菜单集合
+            parentMenuList:[], //一级菜单
+            subMenuList:[], //二级菜单
+        },
+        watch:{
+            menuList:function (n,o) {
+                var that = this;
+                n && n.forEach(function (item, index) {
+                    item.menuParentId == 0 ? that.parentMenuList.push(item) : that.subMenuList.push(item)
+                })
+            }
         },
         methods: {
             //折叠菜单
@@ -114,13 +108,7 @@
                this.url =  "${request.contextPath}/" + url;
                console.log(this.url);
             },
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
-            },
             handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
             //加载菜单
@@ -131,7 +119,6 @@
                     url: 'menu/list.do',
                 }).then(function (data) {
                     that.menuList = data;
-                    console.log(that.menuList)
                 })
             },
             // 获取当前菜单的子菜单
@@ -139,13 +126,14 @@
                 var result = [];
                 var that = this;
                 that.subMenuList && that.subMenuList.forEach(function (item) {
-                    item.modelModelId == modelId ? result.push(item) : ''
+                   item.menuParentId == menuId ? result.push(item) : ''
                 })
                 return result;
             },
         },
         mounted(){
             this.getMemuList();
+            this.openIframe('main');
         }
     })
 </script>
@@ -183,7 +171,7 @@
     }
     .iframe-class{
         width: 100%;
-        height: 100%;
+        height: 100vh;
         border-width: 0px;
     }
 </style>
