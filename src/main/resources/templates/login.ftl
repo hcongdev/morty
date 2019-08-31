@@ -40,8 +40,8 @@
                     url: 'checkLogin.do',
                     data: data,
                     headers:{'Content-Type':'application/x-www-form-urlencoded'}
-            }).then(function (data) {
-                    if (data.data.code == 1){
+                }).then(function (data) {
+                    if (data.code == 1){
                         window.location.href = "index";
                     }else {
                         that.$message.error(data.data.msg);

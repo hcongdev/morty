@@ -52,16 +52,27 @@
                              active-text-color="#ffd04b"
                              :collapse="isCollapse"
                              >
-                         <el-submenu index="1">
+                         <el-submenu :index="menu.menuId+''" :data-index="menu.menuId+''" v-for="(menu,i) in menuList" :key='i'>
                              <template slot="title">
-                                 <i class="el-icon-location"></i>
-                                 <span slot="title">系统管理</span>
+                                 <i class='ms-admin-icon iconfont' v-html="menu.menuIcon"></i>
+                                 <span v-text="menu.menuName"></span>
                              </template>
-                             <el-menu-item-group>
-                                 <el-menu-item index="1-1" @click="openIframe('admin')">管理员管理</el-menu-item>
-                                 <el-menu-item index="1-2" @click="openIframe('role')">角色管理</el-menu-item>
-                             </el-menu-item-group>
+                             <!-- 子菜单 -->
+                             <el-menu-item :index="sub.menuId+''" :data-index="sub.menuId" v-for="(sub,index) in getSubMenu(menu.menuId)"
+                                           :key='sub.menuParentId' v-text="sub.menuName" @click.self='openIframe(sub.menuUrl)'></el-menu-item>
                          </el-submenu>
+
+
+<#--                         <el-submenu index="1">-->
+<#--                             <template slot="title">-->
+<#--                                 <i class="el-icon-location"></i>-->
+<#--                                 <span slot="title">系统管理</span>-->
+<#--                             </template>-->
+<#--                             <el-menu-item-group>-->
+<#--                                 <el-menu-item index="1-1" @click="openIframe('admin')">管理员管理</el-menu-item>-->
+<#--                                 <el-menu-item index="1-2" @click="openIframe('role')">角色管理</el-menu-item>-->
+<#--                             </el-menu-item-group>-->
+<#--                         </el-submenu>-->
                      </el-menu>
                  </el-aside>
                  <!-- 侧边导航结束-->
@@ -82,6 +93,7 @@
             isCollapse: true,
             activeIndex2: '1',
             url:"",
+            menuList:{}, //菜单集合
         },
         methods: {
             //折叠菜单
@@ -110,7 +122,30 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
-            }
+            },
+            //加载菜单
+            getMemuList:function (){
+                let that = this;
+                axios({
+                    method: 'get',
+                    url: 'menu/list.do',
+                }).then(function (data) {
+                    that.menuList = data;
+                    console.log(that.menuList)
+                })
+            },
+            // 获取当前菜单的子菜单
+            getSubMenu: function (menuId) {
+                var result = [];
+                var that = this;
+                that.subMenuList && that.subMenuList.forEach(function (item) {
+                    item.modelModelId == modelId ? result.push(item) : ''
+                })
+                return result;
+            },
+        },
+        mounted(){
+            this.getMemuList();
         }
     })
 </script>

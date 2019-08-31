@@ -21,14 +21,21 @@ public class MenuController {
      * @return
      */
     @RequestMapping("/list")
+    @ResponseBody
     public List<MenuEntity> list(){
         List<MenuEntity> list = menuService.list();
         return list;
     }
 
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public Result save(@ModelAttribute MenuEntity menu){
         menuService.save(menu);
+        return Result.success();
+    }
+
+    @PostMapping("/update")
+    public Result update(@ModelAttribute MenuEntity menu){
+       // menuService.update(menu);
         return Result.success();
     }
 }

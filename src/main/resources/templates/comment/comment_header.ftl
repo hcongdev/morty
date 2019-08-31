@@ -11,5 +11,11 @@
     <link rel="stylesheet" type="text/css"  href="${request.contextPath}/static/css/comment.css"/>
     <#-- iconfont-->
     <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1126314_3xlr4xzucq3.css">
+    <script>
+        //axois拦截，只返回data参数
+        axios.interceptors.response.use(res => {
+            return res.data
+        })
+    </script>
 </head>
 </html>
