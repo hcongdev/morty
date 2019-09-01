@@ -46,7 +46,7 @@
                              text-color="#fff"
                              active-text-color="#ffd04b"
                              :collapse="isCollapse"
-                             unique-opened="true"
+                             :unique-opened="true"
                              >
                          <el-submenu :index="menu.menuId+''" :data-index="menu.menuId+''" v-for="(menu,i) in parentMenuList" :key='i'>
                              <template slot="title">
@@ -62,6 +62,9 @@
                  <!-- 侧边导航结束-->
 
                 <el-container>
+                    <el-header class="container-header">
+                        标题
+                    </el-header>
                     <el-main>
                         <iframe class="iframe-class" :src="url"></iframe>
                     </el-main>

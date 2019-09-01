@@ -44,7 +44,7 @@
                     if (data.code == 1){
                         window.location.href = "index";
                     }else {
-                        that.$message.error(data.data.msg);
+                        that.$message.error(data.msg);
                     }
                 });
             },

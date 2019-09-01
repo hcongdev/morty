@@ -1,5 +1,6 @@
 package com.morty.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.common.entity.Result;
 import com.morty.entity.MenuEntity;
 import com.morty.service.MenuService;
@@ -20,8 +21,16 @@ public class MenuController {
      * 菜单管理页面
      */
     @RequestMapping("/index")
-    public String login(){
+    public String index(){
         return "/menu/index";
+    }
+
+    /**
+     * 菜单编辑页面
+     */
+    @RequestMapping("/form")
+    public String form(){
+        return "/menu/form";
     }
     /**
      * 查询菜单列表
@@ -34,8 +43,12 @@ public class MenuController {
         return list;
     }
 
+    @ResponseBody
     @PostMapping("/save")
     public Result save(@ModelAttribute MenuEntity menu){
+        if (StrUtil.isEmpty(menu.getMenuName())){
+            return Result.failure("错误");
+        }
         menuService.save(menu);
         return Result.success();
     }
