@@ -12,13 +12,17 @@
                 <div class="mt-form-header">新增</div>
                 <el-form class="mt-form" ref="menuForm" :model="menuForm" label-width="80px">
                     <el-form-item label="菜单类型">
-                        <el-input v-model="menuForm.name"></el-input>
+                        <el-radio-group v-model="menuForm.name">
+                            <el-radio :label="0">目录</el-radio>
+                            <el-radio :label="1">菜单</el-radio>
+                            <el-radio :label="2">按钮</el-radio>
+                        </el-radio-group>
                     </el-form-item>
                     <el-form-item label="菜单名称">
                         <el-input v-model="menuForm.menuName"></el-input>
                     </el-form-item>
                     <el-form-item label="上级菜单">
-                        <el-input v-model="menuForm.name"></el-input>
+                        <el-input v-model="menuForm.name" class="menuTree" @focus="dialogVisible = true"  readonly></el-input>
                     </el-form-item>
                     <el-form-item label="菜单URL">
                         <el-input v-model="menuForm.menuUrl"></el-input>
@@ -40,7 +44,18 @@
             </div>
 
         </el-container>
+        <el-dialog
+                title="选择菜单"
+                :visible.sync="dialogVisible"
+                width="30%">
+            <el-tree
+                    :data="newList"
+                    :props="defaultProps"
+                    default-expand-all>
+            </el-tree>
+        </el-dialog>
     </div>
+
 </body>
 </html>
 <script>
@@ -53,6 +68,13 @@ var menuFormVue = new Vue({
             menuType: 0 ,
             menuPerms:"",
         }, //菜单表单
+        menuList:[],//菜单列表
+        dialogVisible:false,
+        defaultProps:{
+            label: 'menuName',
+            children: 'children',
+        },
+        newList:[], //菜单列表
     },
     methods:{
         save:function () {
@@ -68,12 +90,45 @@ var menuFormVue = new Vue({
                     }
                 }
             )
+        },
+        //获取菜单列表
+        list:function () {
+            var that=this;
+            axios({
+                method: 'get',
+                url: '${request.contextPath}/menu/list.do',
+            }).then(
+                function (data) {
+                    that.menuList = data;
+                    var sonList= [];
+                    for (var i =0;i<that.menuList.length;i++){
+                        if (that.menuList[i].menuParentId ==0){
+                            that.newList[i] =that.menuList[i];
+                            sonList=[];
+                          for (var j=0;j<that.menuList.length;j++) {
+                              if (that.menuList[i].menuId == that.menuList[j].menuParentId) {
+                                  sonList.push(that.menuList[j]);
+                                  that.newList[i].children=sonList;
+                              }
+                          }
+                        }
+                    }
+                    console.log(that.newList)
+
+                }
+            )
+        },
+        openTree:function () {
         }
     },
     mounted(){
+        this.list();
     }
 })
 </script>
 <style>
-
+    .menuTree .el-input__inner{
+        background-color: #eee;
+        cursor: pointer;
+    }
 </style>
