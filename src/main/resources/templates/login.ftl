@@ -1,63 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html >
 <head>
-    <meta charset="UTF-8">
-    <title>后台登录</title>
-    <#include "/comment/comment_header.ftl">
+<meta charset="UTF-8">
+	<title>后台登录</title>
+	<#include "/comment/comment_header.ftl">
+	<link rel="stylesheet" href="${request.contextPath}/static/css/normalize.css">
 </head>
 <body>
-    <div id="login">
-        <el-form ref="form" :model="form"  label-width="80px">
-            <el-form-item label="账号">
-                <el-input v-model="form.managerName"></el-input>
-            </el-form-item>
-            <el-form-item label="密码">
-                <el-input v-model="form.managerPassword"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">登录</el-button>
-                <el-button>取消</el-button>
-            </el-form-item>
-        </el-form>
-    </div>
+
+<div class="login">
+	<h1>Login</h1>
+	<div>
+		<input type="text" v-model="form.managerName" placeholder="用户名" required="required" />
+		<input type="password"  v-model="form.managerPassword" placeholder="密码" required="required" />
+		<button @click="onSubmit" class="btn btn-primary btn-block btn-large">登录</button>
+	</div>
+</div>
 </body>
 </html>
 <script>
-    var loginVue = new Vue({
-        el: '#login',
-        data: {
-            form:{
-                managerName:'',
-                managerPassword:"",
-            }
-        },
-        methods:{
-            onSubmit:function () {
-                var that = this;
-                var data = "username="+that.form.managerName + "&password=" + that.form.managerPassword;
-                axios({
-                    method: 'post',
-                    url: 'checkLogin.do',
-                    data: data,
-                    headers:{'Content-Type':'application/x-www-form-urlencoded'}
-                }).then(function (data) {
-                    if (data.code == 1){
-                        window.location.href = "index";
-                    }else {
-                        that.$message.error(data.msg);
-                    }
-                });
-            },
-            list:function () {
-               axios.get(
-                   "list",{managerId:50}
-               ).then(function (value) {
-                   console.log(value);
-               })
-            }
-        },
-        mounted(){
-           this.list();
-        }
-    })
+	var loginVue = new Vue({
+		el: '.login',
+		data: {
+			form:{
+				managerName:'',
+				managerPassword:"",
+			}
+		},
+		methods:{
+			onSubmit:function () {
+				var that = this;
+				if(this.form.managerName == "" || that.form.managerPassword == ""){
+					return ;
+				}
+				var data = "username="+that.form.managerName + "&password=" + that.form.managerPassword;
+				axios({
+					method: 'post',
+					url: 'checkLogin.do',
+					data: data,
+					headers:{'Content-Type':'application/x-www-form-urlencoded'}
+				}).then(function (data) {
+					if (data.code == 1){
+						window.location.href = "index";
+					}else {
+						that.$message.error(data.msg);
+					}
+				});
+			},
+		},
+	})
 </script>

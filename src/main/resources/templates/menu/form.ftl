@@ -22,7 +22,7 @@
                         <el-input v-model="menuForm.menuName"></el-input>
                     </el-form-item>
                     <el-form-item label="上级菜单">
-                        <el-input v-model="menuForm.name" class="menuTree" @focus="dialogVisible = true"  readonly></el-input>
+                        <el-input v-model="menuForm.menuParentId" class="menuTree" @focus="dialogVisible = true"  readonly></el-input>
                     </el-form-item>
                     <el-form-item label="菜单URL">
                         <el-input v-model="menuForm.menuUrl"></el-input>
@@ -51,6 +51,7 @@
             <el-tree
                     :data="newList"
                     :props="defaultProps"
+                    @node-click="handleNodeClick"
                     default-expand-all>
             </el-tree>
         </el-dialog>
@@ -113,12 +114,13 @@ var menuFormVue = new Vue({
                           }
                         }
                     }
-                    console.log(that.newList)
-
                 }
             )
         },
-        openTree:function () {
+        handleNodeClick:function (data) {
+            this.dialogVisible = false;
+            this.menuForm.menuParentId = data.menuId;
+            console.log(data)
         }
     },
     mounted(){
