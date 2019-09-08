@@ -1,7 +1,6 @@
 package com.morty.controller;
 
 import com.common.entity.Result;
-import com.common.exception.MyException;
 import com.morty.constant.Constant;
 import com.morty.entity.MenuEntity;
 import com.morty.service.MenuService;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -47,11 +47,29 @@ public class MenuController {
     }
 
     /**
+     * 查询菜单列表，children
+     * @return
+     */
+    @RequestMapping("/menuList")
+    @ResponseBody
+    public List<MenuEntity> menuList(){
+        List<MenuEntity> list = menuService.list();
+        List<MenuEntity> menu = new ArrayList<>();
+        for (int i=0;i<list.size();i++){
+            if (list.get(i).getMenuParentId() ==0){
+
+            }
+        }
+        return list;
+    }
+
+    /**
      * 保存菜单
      * @param menu
      * @return
      */
     @PostMapping("/save")
+    @ResponseBody
     public Result save(@ModelAttribute MenuEntity menu){
         verifyForm(menu);
         menuService.save(menu);
@@ -64,33 +82,50 @@ public class MenuController {
      * @return
      */
     @PostMapping("/update")
+    @ResponseBody
     public Result update(@ModelAttribute MenuEntity menu){
         verifyForm(menu);
         menuService.updateById(menu);
         return Result.success();
     }
 
-    @GetMapping("/del")
-    public Result del(@ModelAttribute MenuEntity menu){
-
+    @PostMapping("/del")
+    @ResponseBody
+    public Result del(@RequestBody List<MenuEntity> menus){
+        int[] ids = new int[menus.size()];
+        for(int i = 0;i<menus.size();i++){
+            ids[i] =menus.get(i).getMenuId();
+        }
+        menuService.deleteIds(ids);
         return Result.success();
     }
 
     /**
+     * 根据用户编号获取菜单信息
+     * @param menu
+     * @return
+     */
+    @GetMapping("/get")
+    @ResponseBody
+    public Result get(@ModelAttribute MenuEntity menu){
+        MenuEntity menuEntity = menuService.getEntity(menu);
+        return Result.success(menuEntity);
+    }
+    /**
      * 校验参数
      */
-    private void verifyForm(MenuEntity menu){
+    private Result verifyForm(MenuEntity menu){
         if (StringUtils.isEmpty(menu.getMenuName())){
-           throw  new MyException("菜单名称不能为空");
+          return Result.failure("菜单名称不能为空");
         }
 
         if(menu.getMenuParentId() == null){
-            throw new MyException("上级菜单不能为空");
+            return Result.failure("上级菜单不能为空");
         }
         //菜单
         if(menu.getMenuType() == Constant.MenuType.MENU.getValue()){
             if(StringUtils.isBlank(menu.getMenuUrl())){
-                throw new MyException("菜单URL不能为空");
+                return Result.failure("菜单URL不能为空");
             }
         }
         //上级菜单类型
@@ -104,18 +139,16 @@ public class MenuController {
         if(menu.getMenuType() == Constant.MenuType.CATALOG.getValue() ||
                 menu.getMenuType() == Constant.MenuType.MENU.getValue()){
             if(parentType != Constant.MenuType.CATALOG.getValue()){
-                throw new MyException("上级菜单只能为目录类型");
+                return Result.failure("上级菜单只能为目录类型");
             }
-            return ;
         }
 
         //按钮
         if(menu.getMenuType() == Constant.MenuType.BUTTON.getValue()){
             if(parentType != Constant.MenuType.MENU.getValue()){
-                throw new MyException("上级菜单只能为菜单类型");
+                return Result.failure("上级菜单只能为菜单类型");
             }
-            return ;
         }
-
+        return Result.success();
     }
 }

@@ -3,5 +3,34 @@
 
 <mapper namespace="com.morty.mapper.MenuMapper">
 
-
+    <resultMap id="resultMap" type="com.morty.entity.MenuEntity">
+        <result property="menuId" column="menu_id"></result>
+        <result property="menuName" column="menu_name"></result>
+        <result property="menuParentId" column="menu_parent_id"></result>
+        <result property="menuIcon" column="menu_icon"></result>
+        <result property="menuOrder" column="menu_order"></result>
+        <result property="menuPerms" column="menu_perms"></result>
+        <result property="menuType" column="menu_type"></result>
+        <result property="menuUrl" column="menu_url"></result>
+    </resultMap>
+    <delete id="delete" >
+        delete from menu
+        <where>
+            menu_id  in <foreach collection="array" item="item" index="index"
+                                  open="(" separator="," close=")">#{item}</foreach>
+        </where>
+    </delete>
+    <select id="list" resultType="com.morty.entity.MenuEntity">
+        select * from menu
+        <where>
+            <if test="menuId &gt; 0">menu_id=#{menuId} </if>
+            <if test="menuName != null and menuName != ''"> and menu_name=#{menuName} </if>
+            <if test="menuParentId &gt; 0"> and menu_parent_id=#{menuParentId} </if>
+        </where>
+    </select>
+    <select id="getEntity" resultMap="resultMap" resultType="com.morty.entity.MenuEntity">
+        select * from menu where menu_id=#{menuId}
+        <if test="menuName != null and menuName != ''"> and menu_name=#{menuName} </if>
+        <if test="menuParentId &gt; 0"> and menu_parent_id=#{menuParentId} </if>
+    </select>
 </mapper>

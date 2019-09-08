@@ -10,7 +10,7 @@ public class MenuEntity {
     private static final long serialVersionUID = 1L;
 
     @TableId
-    private Long menuId;
+    private int menuId;
 
     private Long menuParentId;
 
