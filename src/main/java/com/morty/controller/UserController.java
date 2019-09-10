@@ -15,17 +15,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private ManagerService managerService;
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "hello";
+    /**
+     * 用户列表页面
+     * @return
+     */
+    @GetMapping("/index")
+    public String index(){
+        return "/user/index";
     }
 
+    /**
+     * 用户表单页面
+     * @return
+     */
+    @GetMapping("/form")
+    public String form(){
+        return "/user/form";
+    }
 
     @GetMapping("/list")
     @ResponseBody

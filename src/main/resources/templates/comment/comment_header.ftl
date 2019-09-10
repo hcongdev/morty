@@ -12,7 +12,7 @@
     <script src="${request.contextPath}/static/js/util/util.js"></script>
     <link rel="stylesheet" type="text/css"  href="${request.contextPath}/static/css/comment.css"/>
     <#-- iconfont-->
-    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1369349_snbqwidlqo8.css">
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1369349_17vagmljv4d.css">
     <script>
         //axois拦截，只返回data参数
         axios.interceptors.response.use(res => {
