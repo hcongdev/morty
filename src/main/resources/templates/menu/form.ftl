@@ -52,6 +52,7 @@
                     :data="newList"
                     :props="defaultProps"
                     @node-click="handleNodeClick"
+                    :props="defaultProps"
                     default-expand-all>
             </el-tree>
         </el-dialog>
@@ -73,12 +74,12 @@ var menuFormVue = new Vue({
             menuParentName: "系统设置",
         }, //菜单表单
         menuList:[],//菜单列表
+        newList:[],
         dialogVisible:false,
         defaultProps:{
             label: 'menuName',
             children: 'children',
         },
-        newList:[], //菜单列表
         //表单验证
         rules:{
             menuName:[
@@ -100,6 +101,7 @@ var menuFormVue = new Vue({
                     }else{
                         url ='${request.contextPath}/menu/save.do';
                     }
+                    delete that.menuForm.children;
                     axios.post(url,
                         Qs.stringify(that.menuForm),{ headers:{'Content-Type':'application/x-www-form-urlencoded'}}
                     ).then(
@@ -123,23 +125,14 @@ var menuFormVue = new Vue({
             var that=this;
             axios({
                 method: 'get',
-                url: '${request.contextPath}/menu/list.do',
+                url: '${request.contextPath}/menu/menuList.do',
             }).then(
                 function (data) {
-                    that.menuList = data;
-                    var sonList= [];
-                    for (var i =0;i<that.menuList.length;i++){
-                        if (that.menuList[i].menuParentId ==0){
-                            that.newList[i] =that.menuList[i];
-                            sonList=[];
-                          for (var j=0;j<that.menuList.length;j++) {
-                              if (that.menuList[i].menuId == that.menuList[j].menuParentId) {
-                                  sonList.push(that.menuList[j]);
-                                  that.newList[i].children=sonList;
-                              }
-                          }
-                        }
-                    }
+                    var child = {};
+                    child.menuName = "一级菜单";
+                    child.children = data;
+                    that.newList[0] = child;
+                    console.log(that.newList)
                 }
             )
         },
