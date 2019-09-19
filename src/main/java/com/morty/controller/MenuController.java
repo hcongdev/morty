@@ -53,15 +53,27 @@ public class MenuController {
     @RequestMapping("/menuList")
     @ResponseBody
     public List<MenuEntity> menuList(){
-        List<MenuEntity> list = menuService.list();
-        List<MenuEntity> menu = new ArrayList<>();
-        for (int i=0;i<list.size();i++){
-            if (list.get(i).getMenuParentId() ==0){
-
+        List<MenuEntity> menuList = menuService.list();
+        List<MenuEntity> _menuList= new ArrayList<>();
+        for (int i=0;i<menuList.size();i++){
+            if (menuList.get(i).getMenuParentId() ==0){
+                _menuList.add(menuList.get(i));
+                _menuList.get(i).setChildren(getChildrenList(menuList.get(i).getMenuId(),menuList));
             }
         }
-        return list;
+        return _menuList;
     }
+
+    private List<MenuEntity> getChildrenList(int menuId,List<MenuEntity> list) {
+        List<MenuEntity> children = new ArrayList<>();
+        for (MenuEntity menu : list){
+            if (menu.getMenuParentId() == menuId){
+                children.add(menu);
+            }
+        }
+        return children;
+    }
+
 
     /**
      * 保存菜单
