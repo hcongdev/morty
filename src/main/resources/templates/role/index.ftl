@@ -2,38 +2,37 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>用户</title>
+    <title>角色</title>
     <#include "/comment/comment_header.ftl">
 </head>
 <body>
-    <div id="user">
+    <div id="role">
         <el-container>
             <el-header class="button-header">
                 <el-row>
+                    <el-input style="width:200px" v-model="roleName" placeholder="请输入角色名称"></el-input>
+                    <el-button type="info" icon="el-icon-search" @click="search">搜索</el-button>
                     <el-button type="info" icon="el-icon-plus" @click="save">新增</el-button>
                     <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>
                     <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>
                 </el-row>
 
             </el-header>
-            <el-table @selection-change="handleSelectionChange" :data="managerName" style="width: 100%" border>
+            <el-table @selection-change="handleSelectionChange" :data="roleList" style="width: 100%" border>
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="managerName" label="账号" width="180"> </el-table-column>
-                <el-table-column prop="managerNickname" label="昵称" width="180"> </el-table-column>
-                <el-table-column prop="managerPassword" label="密码" width="180"> </el-table-column>
-                <el-table-column prop="managerName" label="角色名称" width="180"> </el-table-column>
-                <el-table-column prop="menuType" label="菜单类型" width="180"> </el-table-column>
-                <el-table-column prop="menuPerms" label="菜单权限" align="center"> </el-table-column>
+                <el-table-column prop="roleId" label="角色编号" align="center" width="180"> </el-table-column>
+                <el-table-column prop="roleName" label="角色名称"> </el-table-column>
             </el-table>
         </el-container>
     </div>
 </body>
 </html>
 <script>
-var userVue = new Vue({
-    el:'#user',
+var roleVue = new Vue({
+    el:'#role',
     data:{
-        userList:[], //菜单列表
+        roleName: "", //角色名称
+        roleList:[], //角色列表
         selData: [], //选中菜单
     },
     methods:{
@@ -42,16 +41,22 @@ var userVue = new Vue({
             var that=this;
             axios({
                 method: 'get',
-                url: '${request.contextPath}/user/list.do',
+                url: '${request.contextPath}/role/list.do',
             }).then(
-                function (data) {
-                    that.userList = data;
+                function (res) {
+                    if (res.code = 1){
+                        that.roleList = res.data;
+                    }
                 }
             )
         },
+        //搜索
+        search:function(){
+
+        },
         //新增菜单
         save:function () {
-            window.location.href="${request.contextPath}/user/form.do";
+            window.location.href="${request.contextPath}/role/form.do";
         },
         //编辑菜单
         update:function () {

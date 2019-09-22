@@ -1,9 +1,23 @@
 package com.morty.entity;
 
-public class RoleEntity {
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Data
+@TableName("role")
+public class RoleEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * 角色编号
      */
+    @TableId
     private int roleId;
 
     /**
@@ -12,31 +26,14 @@ public class RoleEntity {
     private String roleName;
 
     /**
-     * 管理员编号
+     * 菜单权限列表
      */
-    private String managerId;
+    @TableField(exist=false)
+    private List<Integer> menuIdList;
 
-    public int getRoleId() {
-        return roleId;
-    }
+    /**
+     * 管理员角色编号
+     */
+    private String roleManagerId;
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(String managerId) {
-        this.managerId = managerId;
-    }
 }
