@@ -128,11 +128,13 @@ var menuFormVue = new Vue({
                 url: '${request.contextPath}/menu/menuList.do',
             }).then(
                 function (data) {
-                    var child = {};
-                    child.menuName = "一级菜单";
-                    child.children = data;
-                    that.newList[0] = child;
-                    console.log(that.newList)
+                    if (data.length > 0){
+                        var child = {};
+                        child.menuName = "一级菜单";
+                        child.children = data;
+                        that.newList[0] = child;
+                        console.log(that.newList)
+                    }
                 }
             )
         },

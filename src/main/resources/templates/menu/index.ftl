@@ -16,11 +16,18 @@
                 </el-row>
 
             </el-header>
-            <el-table @selection-change="handleSelectionChange" :data="menuList" style="width: 100%" border>
+            <el-table
+                    :data="menuList"
+                    @selection-change="handleSelectionChange"
+                    style="width: 100%"
+                    row-key="menuId"
+                    border
+                    style="width: 100%"
+                    :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="menuName" label="菜单名称" align="center" width="180"> </el-table-column>
                 <el-table-column prop="menuIcon" label="菜单图标" width="180"> </el-table-column>
-                <el-table-column prop="menuType" label="菜单类型" width="180"> </el-table-column>
+                <el-table-column prop="menuType" label="菜单类型" width="180" :formatter="typeFormatter"> </el-table-column>
                 <el-table-column prop="menuPerms" label="菜单权限" align="center"> </el-table-column>
             </el-table>
         </el-container>
@@ -40,10 +47,12 @@ var menuVue = new Vue({
             var that=this;
             axios({
                 method: 'get',
-                url: '${request.contextPath}/menu/list.do',
+                url: '${request.contextPath}/menu/menuList.do',
             }).then(
                 function (data) {
-                    that.menuList = data;
+                    if(data.length >0){
+                        that.menuList =data;
+                    }
                 }
             )
         },
@@ -82,6 +91,16 @@ var menuVue = new Vue({
                 that.$notify.info('请先选择菜单');
             }
 
+        },
+        //按钮类型
+        typeFormatter:function(row, column){
+            if (row.menuType == 0){
+                return "目录"
+            }else if(row.menuType == 1){
+                return "菜单"
+            }else if (row.menuType == 2){
+                return "按钮"
+            }
         },
         handleSelectionChange: function(selection) {//列表选中项
             this.selData = selection;

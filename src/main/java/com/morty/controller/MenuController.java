@@ -57,9 +57,9 @@ public class MenuController {
         MenuEntity menu = new MenuEntity();
         List<MenuEntity> _menuList= new ArrayList<>();
         for (int i=0;i<menuList.size();i++){
-            if (menuList.get(i).getMenuParentId() ==0){
-                menu = menuList.get(i);
-                menu.setChildren(getChildrenList(menuList.get(i).getMenuId(),menuList));
+            menu = menuList.get(i);
+            menu.setChildren(getChildrenList(menuList.get(i).getMenuId(),menuList));
+            if ( menuList.get(i).getMenuParentId() == 0){
                 _menuList.add(menu);
             }
         }
