@@ -6,7 +6,7 @@
     <resultMap id="resultMap" type="com.morty.entity.RoleEntity">
         <result property="roleId" column="role_id"></result>
         <result property="roleName" column="role_name"></result>
-        <result property="roleManagerId" column="role_managerId"></result>
+        <result property="roleManagerId" column="role_manager_id"></result>
     </resultMap>
     <insert id="save" parameterType="com.morty.entity.RoleEntity" useGeneratedKeys="true" keyProperty="roleId">
         INSERT INTO role
@@ -14,7 +14,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="roleId &gt; 0">role_id,</if>
             <if test="roleName != null">role_name,</if>
-            <if test="roleManagerId &gt; 0">role_managerId,</if>
+            <if test="roleManagerId &gt; 0">role_manager_id,</if>
         </trim>
         <!-- 注入控制层字段 -->
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -30,21 +30,14 @@
         <where>
             <if test="roleId &gt; 0">role_id=#{roleId} </if>
             <if test="roleName != null and roleName != ''"> and role_name=#{roleName} </if>
-            <if test="roleManagerId &gt; 0"> and role_managerId=#{roleManagerId} </if>
+            <if test="roleManagerId &gt; 0"> and role_manager_id=#{roleManagerId} </if>
         </where>
     </select>
 
-    <delete id="delete" >
-        delete from menu
-        <where>
-            menu_id  in <foreach collection="array" item="item" index="index"
-                                  open="(" separator="," close=")">#{item}</foreach>
-        </where>
-    </delete>
-    <select id="getEntity" resultMap="resultMap" resultType="com.morty.entity.MenuEntity">
-        select * from menu where menu_id=#{menuId}
-        <if test="menuName != null and menuName != ''"> and menu_name=#{menuName} </if>
-        <if test="menuParentId &gt; 0"> and menu_parent_id=#{menuParentId} </if>
+    <select id="getEntity" resultMap="resultMap" resultType="com.morty.entity.RoleEntity">
+        select * from role where role_id=#{roleId}
+        <if test="roleName != null and roleName != ''"> and role_name=#{roleName} </if>
+        <if test="roleId &gt; 0"> and role_id=#{roleId} </if>
     </select>
 
 </mapper>

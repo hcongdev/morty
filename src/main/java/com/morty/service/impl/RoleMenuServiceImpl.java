@@ -32,12 +32,12 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenuEnt
     }
 
     @Override
-    public List<Long> queryMenuIdList(int roleId) {
-        return null;
+    public List<Integer> queryMenuIdList(int roleId) {
+        return baseMapper.queryMenuIdList(roleId);
     }
 
     @Override
     public int deleteBatch(int[] roleIds) {
-        return 0;
+        return baseMapper.deleteBatch(roleIds);
     }
 }

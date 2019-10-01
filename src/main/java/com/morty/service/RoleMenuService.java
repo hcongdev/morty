@@ -12,7 +12,7 @@ public interface RoleMenuService extends IService<RoleMenuEntity> {
     /**
      * 根据角色ID，获取菜单ID列表
      */
-    List<Long> queryMenuIdList(int roleId);
+    List<Integer> queryMenuIdList(int roleId);
 
     /**
      * 根据角色ID数组，批量删除

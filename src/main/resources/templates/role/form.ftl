@@ -11,17 +11,17 @@
             <div class="mt-container">
                 <div class="mt-form-header">新增</div>
                 <el-form class="mt-form" ref="roleForm" :rules="rules" :model="roleForm" label-width="80px">
-                    <el-form-item label="角色名称" prop="roleNmae">
+                    <el-form-item label="角色名称" prop="roleName">
                         <el-input v-model="roleForm.roleName"></el-input>
                     </el-form-item>
-                    <el-form-item label="权限管理" prop="roleNmae">
+                    <el-form-item label="权限管理">
                         <el-tree
+                                ref="tree"
                                 :data="menuList"
                                 :props="defaultProps"
                                 show-checkbox
                                 node-key="menuId"
                                 @check="handleCheck"
-                                :props="defaultProps"
                                 default-expand-all>
                         </el-tree>
                     </el-form-item>
@@ -79,7 +79,7 @@ var roleFormVue = new Vue({
                         function (data) {
                             if (data.code== 1){
                                 that.$message.success("保存成功");
-                                window.location.href = "${request.contextPath}/menu/index.do";
+                                window.location.href = "${request.contextPath}/role/index.do";
                             }else{
                                 that.$message.error(data.msg);
                             }
@@ -105,16 +105,18 @@ var roleFormVue = new Vue({
                 }
             )
         },
-        get:function(menuId){
+        get:function(roleId){
             var that =this;
             axios({
                 method: 'get',
-                params: {menuId:menuId},
-                url: '${request.contextPath}/menu/get.do',
+                params: {roleId:roleId},
+                url: '${request.contextPath}/role/get.do',
             }).then(
                 function (result) {
                     if (result.code == 1){
                        that.roleForm = result.data;
+                        // console.log(data.menuIdList)
+                        that.$refs.tree.setCheckedKeys(result.data.menuIdList);
                     }
                 }
             )
@@ -129,9 +131,3 @@ var roleFormVue = new Vue({
     }
 })
 </script>
-<style>
-    .menuTree .el-input__inner{
-        background-color: #eee;
-        cursor: pointer;
-    }
-</style>

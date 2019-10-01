@@ -36,12 +36,13 @@ var roleVue = new Vue({
         selData: [], //选中菜单
     },
     methods:{
-        //获取菜单列表
+        //获取角色列表
         list:function () {
             var that=this;
             axios({
                 method: 'get',
                 url: '${request.contextPath}/role/list.do',
+                params: {roleName:that.roleName},
             }).then(
                 function (res) {
                     if (res.code = 1){
@@ -52,6 +53,10 @@ var roleVue = new Vue({
         },
         //搜索
         search:function(){
+            //this.roleName =
+            this.list()
+
+
 
         },
         //新增菜单
@@ -62,7 +67,7 @@ var roleVue = new Vue({
         update:function () {
             var that =this;
             if(that.selData.length == 1 ){
-                window.location.href = "${request.contextPath}/menu/form.do?menuId=" + that.selData[0].menuId;
+                window.location.href = "${request.contextPath}/role/form.do?roleId=" + that.selData[0].roleId;
             }else if (that.selData.length == 0 ) {
                 that.$notify.info('请先选择菜单');
             }else{
@@ -73,12 +78,18 @@ var roleVue = new Vue({
         del:function () {
             var that = this;
             if(that.selData.length > 0 ){
+                var roleIds = [];
+                for (var i=0;i <that.selData.length;i++ ){
+                    roleIds.push(that.selData[i].roleId);
+                }
                 that.$confirm('确认删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.post("${request.contextPath}/menu/del.do", that.selData).then(function (data) {
+                    axios.post("${request.contextPath}/role/del.do",{params:
+                            JSON.stringify(roleIds),
+                    }).then(function (data) {
                         if (data) {
                             that.$notify.success('删除成功');
                             that.list();

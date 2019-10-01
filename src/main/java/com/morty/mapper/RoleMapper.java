@@ -12,4 +12,6 @@ public interface RoleMapper extends BaseMapper<RoleEntity> {
     List<RoleEntity> queryByEntity(RoleEntity roleEntity);
 
     void save(RoleEntity role);
+
+    RoleEntity getEntity(RoleEntity role);
 }

@@ -14,4 +14,17 @@ public interface RoleService extends IService<RoleEntity> {
     List<RoleEntity> queryByEntity(RoleEntity roleEntity);
 
     void saveRole(RoleEntity role);
+
+    /**
+     * 删除
+     */
+    void delRole(int[] roleIds);
+
+    /**
+     * 更新角色
+     * @param role
+     */
+    void updateRole(RoleEntity role);
+
+    RoleEntity getEntity(RoleEntity role);
 }
