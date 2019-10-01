@@ -14,4 +14,6 @@ public interface RoleMapper extends BaseMapper<RoleEntity> {
     void save(RoleEntity role);
 
     RoleEntity getEntity(RoleEntity role);
+
+    void delByIds(int[] roleIds);
 }

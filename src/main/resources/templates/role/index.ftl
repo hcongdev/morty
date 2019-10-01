@@ -80,15 +80,18 @@ var roleVue = new Vue({
             if(that.selData.length > 0 ){
                 var roleIds = [];
                 for (var i=0;i <that.selData.length;i++ ){
-                    roleIds.push(that.selData[i].roleId);
+                    roleIds.push(that.selData[i].roleId+"");
                 }
                 that.$confirm('确认删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.post("${request.contextPath}/role/del.do",{params:
-                            JSON.stringify(roleIds),
+                    axios({
+                        method: 'post',
+                            url: '${request.contextPath}/role/del.do',
+                            data: JSON.stringify(roleIds),
+                            headers:{'Content-Type':'application/json;charset=UTF-8'}
                     }).then(function (data) {
                         if (data) {
                             that.$notify.success('删除成功');

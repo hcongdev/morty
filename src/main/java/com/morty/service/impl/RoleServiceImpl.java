@@ -48,7 +48,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     @Override
     public void delRole(int[] roleIds) {
         //1.删除角色
-        this.removeByIds(Arrays.asList(roleIds));
+        roleMapper.delByIds(roleIds);
 
         //删除角色关联菜单
         roleMenuService.deleteBatch(roleIds);

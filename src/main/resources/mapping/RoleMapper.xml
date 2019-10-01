@@ -23,6 +23,13 @@
             <if test="roleManagerId &gt; 0">#{roleManagerId},</if>
         </trim>
     </insert>
+    <delete id="delByIds">
+        delete from role
+        <where>
+            role_id  in <foreach collection="array" item="item" index="index"
+                                 open="(" separator="," close=")">#{item}</foreach>
+        </where>
+    </delete>
 
 
     <select id="queryByEntity"  resultMap="resultMap" resultType="com.morty.entity.RoleEntity">
