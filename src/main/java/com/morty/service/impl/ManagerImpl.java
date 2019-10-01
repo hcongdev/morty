@@ -15,14 +15,10 @@ public class ManagerImpl extends ServiceImpl<ManagerMapper,ManagerEntity> implem
     @Autowired
     private ManagerMapper managerMapper;
 
-    @Override
-    public boolean save(ManagerEntity managerEntity) {
-        return false;
-    }
 
     @Override
-    public List<ManagerEntity> list(ManagerEntity managerEntity) {
-        return baseMapper.list(managerEntity);
+    public List<ManagerEntity> queryByEntity(ManagerEntity managerEntity) {
+        return baseMapper.queryByEntity(managerEntity);
     }
 
     @Override

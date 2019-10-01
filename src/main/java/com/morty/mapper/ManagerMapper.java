@@ -23,4 +23,6 @@ public interface ManagerMapper extends BaseMapper<ManagerEntity> {
      * @return
      */
     ManagerEntity getEntity(ManagerEntity managerEntity);
+
+    List<ManagerEntity> queryByEntity(ManagerEntity managerEntity);
 }

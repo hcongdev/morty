@@ -11,10 +11,10 @@
         <result column="manager_time" property="managerTime"/>
     </resultMap>
 
-    <select id="list" resultMap="resultMap">
+    <select id="queryByEntity" resultMap="resultMap" resultType="com.morty.entity.ManagerEntity">
         select * from manager m
         <where>
-            <if test="managerId != null">and m.manager_id = #{managerId}</if>
+            <if test="managerId  &gt; 0">and m.manager_id = #{managerId}</if>
             <if test="managerName != null">and m.manager_name = #{managerName}</if>
             <if test="managerNickname != null">and m.manager_nickname = #{managerNickname}</if>
         </where>
@@ -22,7 +22,7 @@
     <select id="getEntity" resultMap="resultMap">
         select * from manager m
         <where>
-            <if test="managerId != null">and m.manager_id = #{managerId}</if>
+            <if test="managerId &gt; 0">and m.manager_id = #{managerId}</if>
             <if test="managerName != null">and m.manager_name = #{managerName}</if>
             <if test="managerNickname != null">and m.manager_nickname = #{managerNickname}</if>
         </where>

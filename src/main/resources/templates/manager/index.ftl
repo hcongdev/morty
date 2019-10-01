@@ -6,7 +6,7 @@
     <#include "/comment/comment_header.ftl">
 </head>
 <body>
-    <div id="user">
+    <div id="manager">
         <el-container>
             <el-header class="button-header">
                 <el-row>
@@ -14,26 +14,23 @@
                     <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>
                     <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>
                 </el-row>
-
             </el-header>
-            <el-table @selection-change="handleSelectionChange" :data="managerName" style="width: 100%" border>
+            <el-table @selection-change="handleSelectionChange" :data="managerList" style="width: 100%" border>
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
+                <el-table-column prop="managerId" label="用户编号" width="180"> </el-table-column>
                 <el-table-column prop="managerName" label="账号" width="180"> </el-table-column>
                 <el-table-column prop="managerNickname" label="昵称" width="180"> </el-table-column>
-                <el-table-column prop="managerPassword" label="密码" width="180"> </el-table-column>
-                <el-table-column prop="managerName" label="角色名称" width="180"> </el-table-column>
-                <el-table-column prop="menuType" label="菜单类型" width="180"> </el-table-column>
-                <el-table-column prop="menuPerms" label="菜单权限" align="center"> </el-table-column>
+                <el-table-column prop="managerTime" label="创建时间" > </el-table-column>
             </el-table>
         </el-container>
     </div>
 </body>
 </html>
 <script>
-var userVue = new Vue({
-    el:'#user',
+var managerVue = new Vue({
+    el:'#manager',
     data:{
-        userList:[], //菜单列表
+        managerList:[], //用户列表
         selData: [], //选中菜单
     },
     methods:{
@@ -42,22 +39,22 @@ var userVue = new Vue({
             var that=this;
             axios({
                 method: 'get',
-                url: '${request.contextPath}/user/list.do',
+                url: '${request.contextPath}/manager/list.do',
             }).then(
-                function (data) {
-                    that.userList = data;
+                function (res) {
+                    that.managerList = res.data;
                 }
             )
         },
         //新增菜单
         save:function () {
-            window.location.href="${request.contextPath}/user/form.do";
+            window.location.href="${request.contextPath}/manager/form.do";
         },
         //编辑菜单
         update:function () {
             var that =this;
             if(that.selData.length == 1 ){
-                window.location.href = "${request.contextPath}/menu/form.do?menuId=" + that.selData[0].menuId;
+                window.location.href = "${request.contextPath}/manager/form.do?managerId=" + that.selData[0].managerId;
             }else if (that.selData.length == 0 ) {
                 that.$notify.info('请先选择菜单');
             }else{

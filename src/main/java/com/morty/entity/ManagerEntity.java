@@ -2,6 +2,7 @@ package com.morty.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ public class ManagerEntity {
      * 管理员编号
      */
     @TableId
-    private String managerId;
+    private int managerId;
 
     /**
      * 管理员姓名
@@ -33,6 +34,7 @@ public class ManagerEntity {
     /**
      * 管理员密码
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String managerPassword;
 
     /**
