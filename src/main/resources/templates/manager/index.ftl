@@ -70,7 +70,7 @@ var managerVue = new Vue({
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.post("${request.contextPath}/menu/del.do", that.selData).then(function (data) {
+                    axios.post("${request.contextPath}/manager/del.do", that.selData).then(function (data) {
                         if (data) {
                             that.$notify.success('删除成功');
                             that.list();

@@ -17,12 +17,12 @@
                     <el-form-item label="用户昵称" prop="managerNickname">
                         <el-input v-model="managerForm.managerNickname"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="managerPassword">
+                    <el-form-item label="密码">
                         <el-input show-password v-model="managerForm.managerPassword"></el-input>
                     </el-form-item>
                     <el-form-item label="角色">
-                        <el-checkbox-group v-model="roleIds">
-                            <el-checkbox v-for="role in roleList" :label="role.roleName" :key="role.roleId">{{role.roleName}}</el-checkbox>
+                        <el-checkbox-group v-model="roleIds"  @change="handleCheckedChange">
+                            <el-checkbox v-for="role in roleList" :label="role.roleId" :key="role.roleId">{{role.roleName}}</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
 
@@ -58,9 +58,6 @@ var managerFormVue = new Vue({
             ],
             managerNickName:[
                 { required: true, message: '请输入用户昵称', trigger: 'blur' },
-            ],
-            managerPassword:[
-                { required: true, message: '请输入密码', trigger: 'blur' },
             ],
         }
     },
@@ -107,6 +104,11 @@ var managerFormVue = new Vue({
             });
 
         },
+        handleCheckedChange:function(value){
+            this.managerForm.managerRoleId = value.join(',')
+           // this.managerForm.managerRoleId = (JSON.stringify(value)).join(',')
+            //this.managerForm.managerRoleId =this.managerForm.managerRoleId.join(',')
+        },
         get:function(managerId){
             var that =this;
             axios({
@@ -117,6 +119,10 @@ var managerFormVue = new Vue({
                 function (result) {
                     if (result.code == 1){
                        that.managerForm = result.data;
+                       var strArr = result.data.managerRoleId.split(',');
+                        strArr.forEach(function(data,index,arr){
+                            that.roleIds.push(+data);
+                        });
                     }
                 }
             )

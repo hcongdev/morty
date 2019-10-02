@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -49,6 +50,7 @@ public class ManagerController {
     public Result save(@ModelAttribute ManagerEntity managerEntity){
         verifyForm(managerEntity);
         managerEntity.setManagerPassword(SecureUtil.md5(managerEntity.getManagerPassword()));
+        managerEntity.setManagerTime(new Date());
         managerService.save(managerEntity);
         return Result.success();
     }
