@@ -18,4 +18,12 @@ public interface ManagerService extends IService<ManagerEntity> {
     List<ManagerEntity> queryByEntity(ManagerEntity managerEntity);
 
     ManagerEntity getEntity(ManagerEntity managerEntity);
+
+    /**
+     * 保存用户
+     * @param managerEntity
+     */
+    void saveManager(ManagerEntity managerEntity);
+
+    void updateManager(ManagerEntity managerEntity);
 }

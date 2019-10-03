@@ -47,6 +47,7 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        ManagerEntity manager = (ManagerEntity) principalCollection.getPrimaryPrincipal();
         return null;
     }
 

@@ -16,4 +16,6 @@ public interface RoleMapper extends BaseMapper<RoleEntity> {
     RoleEntity getEntity(RoleEntity role);
 
     void delByIds(int[] roleIds);
+
+    List<Integer> queryAllMenuId(int userId);
 }

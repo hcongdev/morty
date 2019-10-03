@@ -1,7 +1,6 @@
 package com.morty.controller;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.common.entity.Result;
 import com.morty.entity.ManagerEntity;
 import com.morty.service.ManagerService;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -49,9 +47,7 @@ public class ManagerController {
     @ResponseBody
     public Result save(@ModelAttribute ManagerEntity managerEntity){
         verifyForm(managerEntity);
-        managerEntity.setManagerPassword(SecureUtil.md5(managerEntity.getManagerPassword()));
-        managerEntity.setManagerTime(new Date());
-        managerService.save(managerEntity);
+        managerService.saveManager(managerEntity);
         return Result.success();
     }
 
@@ -59,7 +55,7 @@ public class ManagerController {
     @ResponseBody
     public Result update(@ModelAttribute ManagerEntity managerEntity){
         verifyForm(managerEntity);
-        managerService.updateById(managerEntity);
+        managerService.updateManager(managerEntity);
         return Result.success();
     }
 

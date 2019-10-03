@@ -1,5 +1,6 @@
 package com.morty.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,6 +9,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 管理员实体
@@ -40,11 +42,6 @@ public class ManagerEntity {
     private String managerPassword;
 
     /**
-     *
-     */
-    private String managerRoleId;
-
-    /**
      * 管理员创建时间
      */
     @JsonFormat(
@@ -55,5 +52,10 @@ public class ManagerEntity {
     )
     private Date managerTime;
 
+    /**
+     * 角色ID列表
+     */
+    @TableField(exist=false)
+    private List<Integer> roleIdList;
 
 }

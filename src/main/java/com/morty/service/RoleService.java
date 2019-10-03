@@ -27,4 +27,9 @@ public interface RoleService extends IService<RoleEntity> {
     void updateRole(RoleEntity role);
 
     RoleEntity getEntity(RoleEntity role);
+
+    /**
+     * 查询用户的所有菜单ID
+     */
+    List<Integer> queryAllMenuId(int userId);
 }

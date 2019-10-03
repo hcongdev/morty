@@ -27,4 +27,23 @@
             <if test="managerNickname != null">and m.manager_nickname = #{managerNickname}</if>
         </where>
     </select>
+    <insert id="save" parameterType="com.morty.entity.ManagerEntity" useGeneratedKeys="true" keyProperty="managerId">
+        INSERT INTO manager
+        <!-- 添加表字段 -->
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="managerId &gt; 0">manager_id,</if>
+            <if test="managerName != null">manager_name,</if>
+            <if test="managerNickname!= null">manager_nickname,</if>
+            <if test="managerPassword!= null">manager_password,</if>
+            <if test="managerTime!= null">manager_time,</if>
+        </trim>
+        <!-- 注入控制层字段 -->
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="managerId &gt; 0">#{managerId},</if>
+            <if test="managerName != null">#{managerName},</if>
+            <if test="managerNickname != null">#{managerNickname},</if>
+            <if test="managerPassword != null">#{managerPassword},</if>
+            <if test="managerTime != null">#{managerTime},</if>
+        </trim>
+    </insert>
 </mapper>

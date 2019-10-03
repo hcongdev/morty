@@ -49,7 +49,7 @@ var managerFormVue = new Vue({
             managerName: '',
             managerNickname: '',
             managerPassword: '',
-            managerRoleId: '',
+            roleIdList: [],
         },
         //表单验证
         rules:{
@@ -105,9 +105,7 @@ var managerFormVue = new Vue({
 
         },
         handleCheckedChange:function(value){
-            this.managerForm.managerRoleId = value.join(',')
-           // this.managerForm.managerRoleId = (JSON.stringify(value)).join(',')
-            //this.managerForm.managerRoleId =this.managerForm.managerRoleId.join(',')
+            this.managerForm.roleIdList = value
         },
         get:function(managerId){
             var that =this;
@@ -119,10 +117,10 @@ var managerFormVue = new Vue({
                 function (result) {
                     if (result.code == 1){
                        that.managerForm = result.data;
-                       var strArr = result.data.managerRoleId.split(',');
-                        strArr.forEach(function(data,index,arr){
-                            that.roleIds.push(+data);
-                        });
+                       // var strArr = result.data.managerRoleId.split(',');
+                       //  strArr.forEach(function(data,index,arr){
+                       //      that.roleIds.push(+data);
+                       //  });
                     }
                 }
             )

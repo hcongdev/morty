@@ -70,4 +70,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
     public RoleEntity getEntity(RoleEntity role) {
         return roleMapper.getEntity(role);
     }
+
+    @Override
+    public List<Integer> queryAllMenuId(int userId) {
+        return roleMapper.queryAllMenuId(userId);
+    }
 }
