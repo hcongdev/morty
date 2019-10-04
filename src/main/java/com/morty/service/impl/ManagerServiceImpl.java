@@ -10,13 +10,14 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
 @Service("managerService")
 public class ManagerServiceImpl extends ServiceImpl<ManagerMapper,ManagerEntity> implements ManagerService {
 
-    @Autowired
+    @Resource
     private ManagerMapper managerMapper;
 
     @Autowired
@@ -53,5 +54,10 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper,ManagerEntity>
 
         //保存用户与角色的关系
         managerRoleService.saveOrUpdate(managerEntity.getManagerId(),managerEntity.getRoleIdList());
+    }
+
+    @Override
+    public List<String> queryAllPerms(int managerId) {
+        return managerMapper.queryAllPerms(managerId);
     }
 }

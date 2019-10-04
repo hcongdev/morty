@@ -2,12 +2,9 @@ package com.morty.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.morty.entity.ManagerEntity;
-import com.morty.entity.MenuEntity;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface ManagerService extends IService<ManagerEntity> {
 
     /**
@@ -26,4 +23,10 @@ public interface ManagerService extends IService<ManagerEntity> {
     void saveManager(ManagerEntity managerEntity);
 
     void updateManager(ManagerEntity managerEntity);
+
+    /**
+     * 查询用户的所有权限
+     * @param managerId  用户ID
+     */
+    List<String> queryAllPerms(int managerId);
 }

@@ -46,4 +46,11 @@
             <if test="managerTime != null">#{managerTime},</if>
         </trim>
     </insert>
+    <select id="queryAllPerms" resultType="string">
+        select m.menu_perms  from manager_role mr
+            LEFT JOIN role_menu rm on mr.role_id = rm.role_id
+            LEFT JOIN menu m ON rm.menu_id = m.menu_id
+            WHERE mr.manager_id = #{managerId}
+    </select>
+    <select id="list" resultType="com.morty.entity.ManagerEntity"></select>
 </mapper>

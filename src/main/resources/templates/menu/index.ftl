@@ -10,7 +10,9 @@
         <el-container>
             <el-header class="button-header">
                 <el-row>
-                    <el-button type="info" icon="el-icon-plus" @click="save">新增</el-button>
+                    <@shiro.hasPermission name="menu:save">
+                        <el-button type="info" icon="el-icon-plus" @click="save">新增</el-button>
+                    </@shiro.hasPermission>
                     <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>
                     <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>
                 </el-row>
