@@ -1,5 +1,6 @@
 package com.morty.config;
 
+import com.morty.shiro.ShiroTag;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,6 @@ public class FreemarkerConfig implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-//        freeMarkerConfigurer.getConfiguration().setSharedVariable("shiro", new ShiroTags());
+        freeMarkerConfigurer.getConfiguration().setSharedVariable("shiro", new ShiroTag() );
     }
 }

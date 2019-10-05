@@ -3,6 +3,7 @@ package com.morty.controller;
 import cn.hutool.core.util.StrUtil;
 import com.common.entity.Result;
 import com.morty.entity.ManagerEntity;
+import com.morty.service.ManagerRoleService;
 import com.morty.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,9 @@ public class ManagerController {
 
     @Autowired
     private ManagerService managerService;
+
+    @Autowired
+    private ManagerRoleService managerRoleService;
 
     /**
      * 用户列表页面
@@ -63,6 +67,9 @@ public class ManagerController {
     @ResponseBody
     public Result get(@ModelAttribute ManagerEntity managerEntity){
         ManagerEntity manager = managerService.getEntity(managerEntity);
+        //获取用户角色列表
+       List<Integer> roleList = managerRoleService.queryRoleIdList(manager.getManagerId());
+       manager.setRoleIdList(roleList);
         return Result.success(manager);
     }
     /**

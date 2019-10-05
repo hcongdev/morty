@@ -21,7 +21,7 @@
                         <el-input show-password v-model="managerForm.managerPassword"></el-input>
                     </el-form-item>
                     <el-form-item label="角色">
-                        <el-checkbox-group v-model="roleIds"  @change="handleCheckedChange">
+                        <el-checkbox-group v-model="managerForm.roleIdList"  @change="handleCheckedChange">
                             <el-checkbox v-for="role in roleList" :label="role.roleId" :key="role.roleId">{{role.roleName}}</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
@@ -44,7 +44,6 @@ var managerFormVue = new Vue({
     data:{
         managerId: 0,
         roleList:{},//角色列表
-        roleIds: [], //角色编号
         managerForm:{
             managerName: '',
             managerNickname: '',
@@ -117,10 +116,6 @@ var managerFormVue = new Vue({
                 function (result) {
                     if (result.code == 1){
                        that.managerForm = result.data;
-                       // var strArr = result.data.managerRoleId.split(',');
-                       //  strArr.forEach(function(data,index,arr){
-                       //      that.roleIds.push(+data);
-                       //  });
                     }
                 }
             )
