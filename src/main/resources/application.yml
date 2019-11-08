@@ -31,3 +31,9 @@ spring:
     expose-session-attributes: true
     # 设置上下文路径
     request-context-attribute: request
+  activiti:
+    database-schema-update: true   #是否每次都更新数据库
+    check-process-definitions: true  #是否自动部署
+    db-identity-used: true #是否使用activti自带的用户体系
+    process-definition-location-prefix: classpath:/processes/
+
