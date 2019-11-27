@@ -11,6 +11,6 @@ public class adminController {
 
     @GetMapping("/admin")
     public String admin(){
-        return "admin/admin";
+        return "activiti/modeler";
     }
 }

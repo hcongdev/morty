@@ -10,32 +10,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.activiti.rest.editor.main;
 
-import org.activiti.engine.ActivitiException;
-import org.apache.commons.io.IOUtils;
+package org.activiti.rest.diagram.services;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.InputStream;
-
-/**
- * @author Tijs Rademakers
- */
 @RestController
-@RequestMapping("service")
-public class StencilsetRestResource {
-  
-  @RequestMapping(value="/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-  public @ResponseBody
-  String getStencilset() {
-    InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("stencilset.json");
-    try {
-      return IOUtils.toString(stencilsetStream, "utf-8");
-    } catch (Exception e) {
-      throw new ActivitiException("Error while loading stencil set", e);
-    }
+public class ProcessDefinitionDiagramLayoutResource extends BaseProcessDefinitionDiagramLayoutResource {
+
+  @RequestMapping(value="/process-definition/{processDefinitionId}/diagram-layout", method = RequestMethod.GET, produces = "application/json")
+  public ObjectNode getDiagram(@PathVariable String processDefinitionId) {
+    return getDiagramNode(null, processDefinitionId);
   }
 }
