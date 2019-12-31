@@ -6,14 +6,21 @@
                 <h2 translate>PROPERTY.ASSIGNMENT.TITLE</h2>
             </div>
             <div class="modal-body">
-            
-            	<div class="row row-no-gutter">
-            		<div class="form-group">
-            			<label for="assigneeField">{{'PROPERTY.ASSIGNMENT.ASSIGNEE' | translate}}</label>
-            			<input type="text" id="assigneeField" class="form-control" ng-model="assignment.assignee" placeholder="{{'PROPERTY.ASSIGNMENT.ASSIGNEE_PLACEHOLDER' | translate}}" />
-            		</div>
-            	</div>
-            	
+
+                <div class="row row-no-gutter">
+                    <div class="form-group">
+                        <label for="assigneeField">{{'PROPERTY.ASSIGNMENT.ASSIGNEE' | translate}}</label>
+                        <input ng-show="isInput" type="text"
+                               id="assigneeField" class="form-control" ng-model="assignment.assignee" placeholder="{{'PROPERTY.ASSIGNMENT.ASSIGNEE_PLACEHOLDER' | translate}}" />
+                        <select ng-show="!isInput"
+                                id="assigneeField" class="form-control" ng-model="assignment.assignee"
+                                placeholder="{{'PROPERTY.ASSIGNMENT.ASSIGNEE_PLACEHOLDER' | translate}}"
+                                ng-options="x[userId] as x[userText] for x in assignees">
+                        </select>
+                    </div>
+                </div>
+
+
                 <div class="row row-no-gutter">
                     <div class="form-group">
                     	<label for="userField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_USERS' | translate}}</label>
@@ -23,7 +30,7 @@
             	            <i ng-if="$index == (assignment.candidateUsers.length - 1)" class="glyphicon glyphicon-plus clickable-property" ng-click="addCandidateUserValue($index)"></i>
                         </div>
                    	</div>
-            
+
                     <div class="form-group">
                     	<label for="groupField">{{'PROPERTY.ASSIGNMENT.CANDIDATE_GROUPS' | translate}}</label>
                         <div ng-repeat="candidateGroup in assignment.candidateGroups">

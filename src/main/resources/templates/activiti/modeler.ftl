@@ -57,7 +57,9 @@
 
 	<div id="main" class="wrapper full clearfix" ng-style="{height: window.height + 'px'}" ng-app="activitiModeler" ng-include="'editor-app/editor.html'">
 	</div>
-
+	<script>
+		var base = '${request.contextPath}'
+	</script>
 	<!--[if lt IE 9]>
 	<script src="editor-app/libs/es5-shim-15.3.4.5/es5-shim.js"></script>
 	<script src="editor-app/libs/json3_3.2.6/lib/json3.min.js"></script>
@@ -135,6 +137,7 @@
 
 	<script src="editor-app/configuration/properties.js" type="text/javascript"></script>
 	<script src="editor-app/configuration/properties-custom-controllers.js" type="text/javascript"></script>
+	<script src="editor-app/my-config.js" type="text/javascript"></script>
 
 </body>
 </html>

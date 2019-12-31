@@ -32,6 +32,11 @@ public class ModelerController {
     @Autowired
     ObjectMapper objectMapper;
 
+    @RequestMapping("index")
+    public String index(HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+        return "activiti/model/index";
+    }
+
     @RequestMapping({"/edit"})
     public String edit(HttpServletResponse response, HttpServletRequest request, ModelMap model) {
         return "activiti/modeler";
@@ -43,15 +48,13 @@ public class ModelerController {
      * @throws UnsupportedEncodingException
      */
     @GetMapping("/create")
-    public Result newModel() throws UnsupportedEncodingException {
+    @ResponseBody
+    public Result newModel(@PathVariable("key")String key,@PathVariable("name")String name,@PathVariable("description")String description) throws UnsupportedEncodingException {
 //        RepositoryService repositoryService = processEngine.getRepositoryService();
         //初始化一个空模型
         Model model = repositoryService.newModel();
         //设置一些默认信息
-        String name = "new-process";
-        String description = "";
         int revision = 1;
-        String key = "process";
         ObjectNode modelNode = objectMapper.createObjectNode();
         modelNode.put(ModelDataJsonConstants.MODEL_NAME, name);
         modelNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
@@ -79,7 +82,7 @@ public class ModelerController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Object modelList(){
+    public Result modelList(){
         List<Model> resultList =  repositoryService.createModelQuery().orderByCreateTime().desc().list();
         return Result.success(resultList);
     }
@@ -91,6 +94,7 @@ public class ModelerController {
      * @throws Exception
      */
     @PostMapping("{id}/deployment")
+    @ResponseBody
     public Result deploy(@PathVariable("id")String id) throws Exception {
 
         //获取模型
@@ -128,7 +132,7 @@ public class ModelerController {
     @RequestMapping("/delete")
     @ResponseBody
     public Result deleteOne(@PathVariable("id")String id){
-        repositoryService.deleteModel(id);
+        repositoryService.deleteDeployment(id,true);
         return Result.success();
     }
 

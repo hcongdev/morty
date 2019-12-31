@@ -32,39 +32,55 @@ var KisBpmAssignmentCtrl = [ '$scope', '$modal', function($scope, $modal) {
     $modal(opts);
 }];
 
-var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
-    	
+var KisBpmAssignmentPopupCtrl = [ '$scope','$http', function($scope, $http) {
+
     // Put json representing assignment on scope
     if ($scope.property.value !== undefined && $scope.property.value !== null
         && $scope.property.value.assignment !== undefined
-        && $scope.property.value.assignment !== null) 
+        && $scope.property.value.assignment !== null)
     {
         $scope.assignment = $scope.property.value.assignment;
     } else {
         $scope.assignment = {};
     }
 
-    if ($scope.assignment.candidateUsers == undefined || $scope.assignment.candidateUsers.length == 0)
-    {
-    	$scope.assignment.candidateUsers = [{value: ''}];
-    }
-    
-    // Click handler for + button after enum value
-    var userValueIndex = 1;
-    $scope.addCandidateUserValue = function(index) {
-        $scope.assignment.candidateUsers.splice(index + 1, 0, {value: 'value ' + userValueIndex++});
-    };
+	if ($scope.assignment.candidateUsers == undefined || $scope.assignment.candidateUsers.length == 0)
+	{
+		$scope.assignment.candidateUsers = [{value: ''}];
+	}
+	//是否是编辑框
+	$scope.isInput = true;
+	$scope.candidateGroupIndex=0;
+	$http({
+		method: 'get',
+		headers: {'Accept': 'application/json',
+			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+		url: ACTIVITI.CONFIG.userUrl})
+		.success(function (data, status, headers, config) {
+			$scope.assignees = data.data;
+			$scope.userId = ACTIVITI.CONFIG.userId;
+			$scope.userText = ACTIVITI.CONFIG.userText;
+			$scope.isInput = false
+		})
+		.error(function (data, status, headers, config) {
+		});
+
+	// Click handler for + button after enum value
+	var userValueIndex = 1;
+	$scope.addCandidateUserValue = function(index) {
+		$scope.assignment.candidateUsers.splice(index + 1, 0, {value: 'value ' + userValueIndex++});
+	};
 
     // Click handler for - button after enum value
     $scope.removeCandidateUserValue = function(index) {
         $scope.assignment.candidateUsers.splice(index, 1);
     };
-    
+
     if ($scope.assignment.candidateGroups == undefined || $scope.assignment.candidateGroups.length == 0)
     {
     	$scope.assignment.candidateGroups = [{value: ''}];
     }
-    
+
     var groupValueIndex = 1;
     $scope.addCandidateGroupValue = function(index) {
         $scope.assignment.candidateGroups.splice(index + 1, 0, {value: 'value ' + groupValueIndex++});
@@ -80,7 +96,7 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
         $scope.property.value = {};
         handleAssignmentInput($scope);
         $scope.property.value.assignment = $scope.assignment;
-        
+
         $scope.updatePropertyInModel($scope.property);
         $scope.close();
     };
@@ -91,7 +107,7 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
     	$scope.property.mode = 'read';
     	$scope.$hide();
     };
-    
+
     var handleAssignmentInput = function($scope) {
     	if ($scope.assignment.candidateUsers)
     	{
@@ -108,18 +124,18 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
 	        		toRemoveIndexes[toRemoveIndexes.length] = i;
 	        	}
 	        }
-	        
+
 	        for (var i = 0; i < toRemoveIndexes.length; i++)
 	        {
 	        	$scope.assignment.candidateUsers.splice(toRemoveIndexes[i], 1);
 	        }
-	        
+
 	        if (emptyUsers)
 	        {
 	        	$scope.assignment.candidateUsers = undefined;
 	        }
     	}
-        
+
     	if ($scope.assignment.candidateGroups)
     	{
 	        var emptyGroups = true;
@@ -135,12 +151,12 @@ var KisBpmAssignmentPopupCtrl = [ '$scope', function($scope) {
 	        		toRemoveIndexes[toRemoveIndexes.length] = i;
 	        	}
 	        }
-	        
+
 	        for (var i = 0; i < toRemoveIndexes.length; i++)
 	        {
 	        	$scope.assignment.candidateGroups.splice(toRemoveIndexes[i], 1);
 	        }
-	        
+
 	        if (emptyGroups)
 	        {
 	        	$scope.assignment.candidateGroups = undefined;
