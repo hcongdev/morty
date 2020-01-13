@@ -1,16 +1,22 @@
 package com.morty.activiti;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.common.entity.Result;
 import com.common.util.BasicUtil;
 import com.common.util.UserUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morty.entity.ManagerEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.*;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.image.ProcessDiagramGenerator;
+import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -37,7 +46,9 @@ public class ProcessController {
     private RepositoryService repositoryService;
 
     @Autowired
-    protected IdentityService identityService;
+    private IdentityService identityService;
+
+
 
 
     @RequestMapping("index")
@@ -68,7 +79,6 @@ public class ProcessController {
      *      bussName：业务对象名称
      *      bussType：业务对象类型
      *      startUserId: 发起人id
-     *      startUnitId: 发起人单位id
      */
     @GetMapping("run/{key}")
     @ResponseBody
@@ -76,8 +86,9 @@ public class ProcessController {
         //设置当前用户
         ManagerEntity manager = UserUtil.getManagerSession(request.getSession());
         identityService.setAuthenticatedUserId(String.valueOf(manager.getManagerId()));
-
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, BasicUtil.assemblyRequestMap());
+        Map<String, Object> variables =BasicUtil.assemblyRequestMap();
+        variables.put("managerId",String.valueOf(manager.getManagerId()));
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, variables);
 
         log.info("启动一个流程实例，id为：{}",processInstance.getId());
         return Result.success(processInstance.getId());
@@ -109,5 +120,39 @@ public class ProcessController {
         while ((len = resourceAsStream.read(b,0,1024)) != -1){
             response.getOutputStream().write(b,0,len);
         }
+    }
+
+
+    /**
+     * 导出model的图片，静态流程图
+     */
+    //@Auth(verifyLogin=false)
+    @RequestMapping(value = "/exportPNG", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    //@ResponseBody
+    public void exportPNG(@RequestParam("modelId") String modelId, HttpServletResponse response) {
+        try {
+            Model modelData = repositoryService.getModel(modelId);
+            BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+            JsonNode editorNode = new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
+            BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
+
+            ProcessDiagramGenerator processDiagramGenerator = new DefaultProcessDiagramGenerator();
+            InputStream inputStream = processDiagramGenerator.generateDiagram(bpmnModel,
+                    "png",
+                    Collections.<String>emptyList(), Collections.<String>emptyList(),
+                    "WenQuanYi Micro Hei", "WenQuanYi Micro Hei","WenQuanYi Micro Hei",
+                    null, 1.0);
+
+            OutputStream out = response.getOutputStream();
+            for (int b = -1; (b = inputStream.read()) != -1; ) {
+                out.write(b);
+            }
+            out.close();
+            inputStream.close();
+
+        } catch (Exception e) {
+            log.info("导出失败：modelId="+modelId, e);
+        }
+
     }
 }

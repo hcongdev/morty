@@ -132,7 +132,7 @@ public class ModelerController {
     @RequestMapping("/delete")
     @ResponseBody
     public Result deleteOne(@PathVariable("id")String id){
-        repositoryService.deleteDeployment(id,true);
+        repositoryService.deleteModel(id);
         return Result.success();
     }
 
