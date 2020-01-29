@@ -8,8 +8,7 @@ import com.morty.entity.ManagerEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
-import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -81,8 +80,33 @@ public class TaskAction {
     public Result todoTask(HttpServletRequest request){
         ManagerEntity manager = UserUtil.getManagerSession(request.getSession());
         List<Task> allTask = taskService.createTaskQuery().taskCandidateOrAssigned(String.valueOf(manager.getManagerId())).list();
-        return Result.success(JSONUtil.parseArray(JSONUtil.toJsonStr(allTask)));
+        List tasks = new ArrayList();
+        Map<String, Object> stringObjectMap = new HashMap<>();
+        for (int i =0;i<allTask.size();i++){
+             stringObjectMap = packeyVariables(allTask.get(i).getProcessInstanceId());
+            stringObjectMap.put("name",allTask.get(i).getName());
+            stringObjectMap.put("createTime",allTask.get(i).getCreateTime());
+            stringObjectMap.put("assignee",allTask.get(i).getAssignee());
+            stringObjectMap.put("id",allTask.get(i).getId());
+            System.out.println(stringObjectMap);
+            tasks.add(stringObjectMap);
+        }
+        return Result.success(JSONUtil.parseArray(JSONUtil.toJsonStr(tasks)));
     }
+
+    //读取历史变量
+    private Map<String,Object> packeyVariables(String processInstanceId){
+        Map<String,Object> historyVariables = new HashMap<String,Object>();
+        List<HistoricVariableInstance> list = processEngine.getHistoryService()
+                .createHistoricVariableInstanceQuery()                                      //创建一个历史的流程变量查询对象
+                .processInstanceId(processInstanceId)
+                .list();
+        for (HistoricVariableInstance historicVariableInstance : list){
+            historyVariables.put(historicVariableInstance.getVariableName(),historicVariableInstance.getValue());
+        }
+        return historyVariables;
+    }
+
 
     /**
      * 读取带跟踪的图片  动态流程图

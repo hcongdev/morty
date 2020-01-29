@@ -8,18 +8,7 @@
 <body>
 <div id="process">
     <el-container>
-        <el-header class="button-header">
-            <el-row>
-<#--                <el-input style="width:200px" v-model="roleName" placeholder="请输入角色名称"></el-input>-->
-<#--                <el-button type="info" icon="el-icon-search" @click="search">搜索</el-button>-->
-<#--                <el-button type="info" icon="el-icon-plus" @click="open">新增</el-button>-->
-<#--                <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>-->
-<#--                <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>-->
-            </el-row>
-
-        </el-header>
         <el-table @selection-change="handleSelectionChange" :data="processList" style="width: 100%" border>
-            <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column prop="id" label="流程定义ID"> </el-table-column>
             <el-table-column prop="deploymentId" label="部署ID"> </el-table-column>
             <el-table-column prop="key" label="流程定义KEY"> </el-table-column>
@@ -45,20 +34,20 @@
         <el-form :model="processForm"  ref='processForm' :rules='processFormRules' size="mini" label-width="100px">
             <el-form-item label="请假开始时间"  prop='startDate'>
                 <el-date-picker
-                        v-model="modelForm.startDate"
+                        v-model="processForm.startDate"
                         type="datetime"
                         placeholder="选择请假开始时间">
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="请假结束时间"  prop='endDate'>
                 <el-date-picker
-                        v-model="modelForm.endDate"
+                        v-model="processForm.endDate"
                         type="datetime"
                         placeholder="选择请假结束时间">
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="请假原因"  prop='reason'>
-                <el-input v-model="modelForm.reason" size="mini" placeholder="请输入请假原因"></el-input>
+                <el-input v-model="processForm.reason" size="mini" placeholder="请输入请假原因"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -75,12 +64,13 @@
             isShow:false,
             processList:[], //模型集合
             selData: [], //选中流程
-            modelForm:{
+            processForm:{
                 startDate:'', //开始时间
                 endDate:'', //结束时间
                 reason:'', //原因
             },
             key:'',//部署key
+            processFormRules:{},
         },
         methods: {
             open:function(){
@@ -131,7 +121,7 @@
                 axios({
                     method: 'get',
                     url: "${request.contextPath}/process/run/"+that.key+".do",
-                    params: that.modelForm
+                    params: that.processForm
                 }).then(function (data) {
                     if (data.code == 1){
                         that.$message.success("流程启动成功");

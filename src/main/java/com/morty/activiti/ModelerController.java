@@ -131,7 +131,7 @@ public class ModelerController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public Result deleteOne(@PathVariable("id")String id){
+    public Result deleteOne(@RequestParam("id")String id){
         repositoryService.deleteModel(id);
         return Result.success();
     }
