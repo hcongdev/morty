@@ -8,25 +8,15 @@
 <body>
 <div id="history">
     <el-container>
-        <el-header class="button-header">
-            <el-row>
-<#--                <el-input style="width:200px" v-model="roleName" placeholder="请输入角色名称"></el-input>-->
-<#--                <el-button type="info" icon="el-icon-search" @click="search">搜索</el-button>-->
-<#--                <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>-->
-<#--                <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>-->
-            </el-row>
-
-        </el-header>
-        <el-table @selection-change="handleSelectionChange" :data="historyList" style="width: 100%" border>
-            <el-table-column type="selection" width="55" align="center"></el-table-column>
-            <el-table-column prop="id" label="任务id"> </el-table-column>
-            <el-table-column prop="name" label="任务名称"> </el-table-column>
-            <el-table-column prop="createTime" label="创建时间" :formatter="timesFormatter"> </el-table-column>
-            <el-table-column prop="assignee" label="办理人"> </el-table-column>
+        <el-table :data="historyList" style="width: 100%" border>
+            <el-table-column prop="startUser" label="申请人"> </el-table-column>
+            <el-table-column prop="reason" label="请假原因"> </el-table-column>
+            <el-table-column prop="startDate" label="开始时间" :formatter="startDateFormatter"> </el-table-column>
+            <el-table-column prop="endDate" label="结束时间" :formatter="endDateFormatter"> </el-table-column>
+            <el-table-column prop="approve" label="请假结果" :formatter="approveFormatter"> </el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="200">
                 <template slot-scope="scope">
-                    <el-link type="primary" :underline="false" @click="isShow=true;id=scope.row.id">办理任务</el-link>
-                    <el-link type="primary" :underline="false" @click="showPic(scope.row.processInstanceId)">查看当前流程图</el-link>
+                    <el-link type="primary" :underline="false" @click="delHistory(scope.row.processInstanceId)">删除记录</el-link>
                 </template>
             </el-table-column>
         </el-table>
@@ -54,8 +44,41 @@
                     }
                 })
             },
-            handleSelectionChange: function(selection) {//列表选中项
-                this.selData = selection;
+            //时间转换
+            startDateFormatter:function(row, column){
+                return formateDate(row.startDate);
+            },
+            //时间转换
+            endDateFormatter:function(row, column){
+                return formateDate(row.endDate);
+            },
+            approveFormatter:function(row){
+                if (row.approve == "true") {
+                    return "已同意"
+                }else{
+                    return  "不同意";
+                }
+            },
+            delHistory:function (id) {
+                var that = this;
+                that.$confirm('确认删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios({
+                        method: 'post',
+                        url: '${request.contextPath}/history/delete',
+                        params: {processInstanceId:id},
+                    }).then(
+                        function (res) {
+                            if (res.code = 1){
+                                that.$notify.success('删除成功');
+                                that.getHistoryList();
+                            }
+                        }
+                    )
+                })
             },
         },
         mounted(){

@@ -5,6 +5,7 @@ import com.common.entity.Result;
 import com.common.util.BasicUtil;
 import com.common.util.UserUtil;
 import com.morty.entity.ManagerEntity;
+import com.morty.service.ManagerService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
@@ -60,9 +61,8 @@ public class TaskAction {
     @Autowired
     private ProcessEngineConfiguration processEngineConfiguration;
 
-
-    protected static Map<String, ProcessDefinition> PROCESS_DEFINITION_CACHE = new HashMap<String, ProcessDefinition>();
-
+    @Autowired
+    private ManagerService managerService;
     /**
      * 任务主页面
      */
@@ -83,12 +83,14 @@ public class TaskAction {
         List tasks = new ArrayList();
         Map<String, Object> stringObjectMap = new HashMap<>();
         for (int i =0;i<allTask.size();i++){
-             stringObjectMap = packeyVariables(allTask.get(i).getProcessInstanceId());
+            stringObjectMap = packeyVariables(allTask.get(i).getProcessInstanceId());
             stringObjectMap.put("name",allTask.get(i).getName());
             stringObjectMap.put("createTime",allTask.get(i).getCreateTime());
             stringObjectMap.put("assignee",allTask.get(i).getAssignee());
             stringObjectMap.put("id",allTask.get(i).getId());
-            System.out.println(stringObjectMap);
+            stringObjectMap.put("processInstanceId",allTask.get(i).getProcessInstanceId());
+            ManagerEntity managerEntity = managerService.getById(allTask.get(i).getAssignee());
+            stringObjectMap.put("assigneeName",managerEntity.getManagerName());
             tasks.add(stringObjectMap);
         }
         return Result.success(JSONUtil.parseArray(JSONUtil.toJsonStr(tasks)));
@@ -196,14 +198,7 @@ public class TaskAction {
         return highFlows;
     }
 
-    private ProcessDefinition getProcessDefinition(String processDefinitionId) {
-        ProcessDefinition processDefinition = PROCESS_DEFINITION_CACHE.get(processDefinitionId);
-        if (processDefinition == null) {
-            processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
-            PROCESS_DEFINITION_CACHE.put(processDefinitionId, processDefinition);
-        }
-        return processDefinition;
-    }
+
 
     @GetMapping("/complete/{taskId}")
     @ResponseBody

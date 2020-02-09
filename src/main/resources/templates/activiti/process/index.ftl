@@ -24,30 +24,25 @@
                 </template></el-table-column>
             <el-table-column label="操作" fixed="right" align="center" width="200">
                 <template slot-scope="scope">
-                    <el-link type="primary" :underline="false" @click="deleteProcess(scope.row.deploymentId)">删除</el-link>
                     <el-link type="primary" :underline="false" @click="openProcessDialog(scope.row.key)">启动</el-link>
+                    <el-link type="primary" :underline="false" @click="deleteProcess(scope.row.deploymentId)">删除</el-link>
                 </template>
             </el-table-column>
         </el-table>
     </el-container>
     <el-dialog title="启动流程" :visible.sync="isShow">
         <el-form :model="processForm"  ref='processForm' :rules='processFormRules' size="mini" label-width="100px">
-            <el-form-item label="请假开始时间"  prop='startDate'>
+            <el-form-item label="请假时间"  prop='daterange'>
                 <el-date-picker
-                        v-model="processForm.startDate"
-                        type="datetime"
-                        placeholder="选择请假开始时间">
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item label="请假结束时间"  prop='endDate'>
-                <el-date-picker
-                        v-model="processForm.endDate"
-                        type="datetime"
-                        placeholder="选择请假结束时间">
+                        v-model="processForm.daterange"
+                        type="datetimerange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="请假原因"  prop='reason'>
-                <el-input v-model="processForm.reason" size="mini" placeholder="请输入请假原因"></el-input>
+                <el-input  type="textarea" v-model="processForm.reason" size="mini" placeholder="请输入请假原因"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -58,6 +53,13 @@
 </div>
 </body>
 <script>
+    var validDate = (rule,value,callback) => {
+        if(!value[0] || !value[1]){
+            callback(new Error("请选择时间"))
+        }else{
+            callback()
+        }
+    }
     var processlVue = new Vue({
         el:'#process',
         data:{
@@ -65,12 +67,23 @@
             processList:[], //模型集合
             selData: [], //选中流程
             processForm:{
+                daterange:[],//请假时间
                 startDate:'', //开始时间
                 endDate:'', //结束时间
                 reason:'', //原因
             },
+
             key:'',//部署key
-            processFormRules:{},
+            processFormRules:{
+                reason: [
+                    { required: true, message: '请填写请假原因', trigger: 'blur' }
+                ],
+                daterange: [{
+                    required: true,
+                    validator: validDate,
+                    trigger: 'blur'
+                }]
+            },
         },
         methods: {
             open:function(){
@@ -118,17 +131,27 @@
             //启动流程
             runProcess:function () {
                 let that = this;
-                axios({
-                    method: 'get',
-                    url: "${request.contextPath}/process/run/"+that.key+".do",
-                    params: that.processForm
-                }).then(function (data) {
-                    if (data.code == 1){
-                        that.$message.success("流程启动成功");
+                that.processForm.startDate = that.processForm.daterange[0];
+                that.processForm.endDate = that.processForm.daterange[1];
+                delete that.processForm.daterange;
+                this.$refs.processForm.validate((valid) => {
+                    if (valid) {
+                        axios({
+                            method: 'get',
+                            url: "${request.contextPath}/process/run/"+that.key+".do",
+                            params: that.processForm
+                        }).then(function (data) {
+                            if (data.code == 1){
+                                that.$message.success("流程启动成功");
+                                that.isShow = false;
+                            } else {
+                                that.$message.error(data.msg);
+                            }
+                        })
                     } else {
-                        that.$message.error(data.msg);
+                        return false;
                     }
-                })
+                });
             }
         },
         mounted(){
