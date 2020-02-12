@@ -15,7 +15,7 @@
         select * from manager m
         <where>
             <if test="managerId  &gt; 0">and m.manager_id = #{managerId}</if>
-            <if test="managerName != null">and m.manager_name = #{managerName}</if>
+            <if test="managerName != null and managerName != ''">and m.manager_name like concat('%',#{managerName},'%')</if>
             <if test="managerNickname != null">and m.manager_nickname = #{managerNickname}</if>
         </where>
     </select>

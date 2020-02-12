@@ -53,11 +53,7 @@ var roleVue = new Vue({
         },
         //搜索
         search:function(){
-            //this.roleName =
             this.list()
-
-
-
         },
         //新增菜单
         save:function () {

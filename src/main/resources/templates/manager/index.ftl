@@ -10,6 +10,8 @@
         <el-container>
             <el-header class="button-header">
                 <el-row>
+                    <el-input style="width:200px" v-model="managerName" placeholder="请输入用户名称"></el-input>
+                    <el-button type="info" icon="el-icon-search" @click="list">搜索</el-button>
                     <el-button type="info" icon="el-icon-plus" @click="save">新增</el-button>
                     <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>
                     <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>
@@ -18,7 +20,7 @@
             <el-table @selection-change="handleSelectionChange" :data="managerList" style="width: 100%" border>
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="managerId" label="用户编号" width="180"> </el-table-column>
-                <el-table-column prop="managerName" label="账号" width="180"> </el-table-column>
+                <el-table-column prop="managerName" label="用户名" width="180"> </el-table-column>
                 <el-table-column prop="managerNickname" label="昵称" width="180"> </el-table-column>
                 <el-table-column prop="managerTime" label="创建时间" > </el-table-column>
             </el-table>
@@ -30,6 +32,7 @@
 var managerVue = new Vue({
     el:'#manager',
     data:{
+        managerName:"",//用户名
         managerList:[], //用户列表
         selData: [], //选中菜单
     },
@@ -40,6 +43,7 @@ var managerVue = new Vue({
             axios({
                 method: 'get',
                 url: '${request.contextPath}/manager/list.do',
+                params: {managerName:that.managerName},
             }).then(
                 function (res) {
                     that.managerList = res.data;

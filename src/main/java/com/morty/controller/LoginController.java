@@ -28,6 +28,7 @@ public class LoginController {
         try {
             //登陆成功的话，放到session中
             subject.login(usernamePasswordToken);
+
         }catch (UnknownAccountException e) {
             return Result.failure(e.getMessage());
         }catch (IncorrectCredentialsException e) {

@@ -80,7 +80,7 @@ var managerFormVue = new Vue({
             this.$refs.managerForm.validate((valid) => {
                 if (valid) {
                     var url = '';
-                    if (this.menuId > 0){
+                    if (this.managerId > 0){
                         url = '${request.contextPath}/manager/update.do';
                     }else{
                         url ='${request.contextPath}/manager/save.do';

@@ -21,10 +21,10 @@
                 <div class="item">
                     <el-dropdown trigger="click" placement="top-start">
                         <span style="color: #fff">
-                            admin
+                           {{userName}}
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item @click.native="openInfo">修改密码</el-dropdown-item>
+                            <el-dropdown-item @click.native="changeFormVisible = true">修改密码</el-dropdown-item>
                             <el-dropdown-item @click.native="userQuit">退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -71,8 +71,25 @@
                 </el-container>
             </el-container>
         </el-container>
+        <el-dialog title="修改密码" :visible.sync="changeFormVisible" width="40%">
+            <el-form :model="passwordForm"  :rules="rules" ref="passwordForm" >
+                <el-form-item label="原密码" label-width="120px" prop="managerOldPassword">
+                    <el-input v-model="passwordForm.managerOldPassword" show-password></el-input>
+                </el-form-item>
+                <el-form-item label="新密码" label-width="120px" prop="managerPassword">
+                    <el-input v-model="passwordForm.managerPassword" show-password></el-input>
+                </el-form-item>
+                <el-form-item label="确认新密码" label-width="120px" prop="managerNewPassword">
+                    <el-input v-model="passwordForm.managerNewPassword" show-password></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="changePassword">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
-
+</body>
 <script>
     var indexVue = new Vue({
         el:'#index',
@@ -83,6 +100,27 @@
             menuList:[], //菜单集合
             parentMenuList:[], //一级菜单
             subMenuList:[], //二级菜单
+            changeFormVisible: false, //修改密码弹窗
+            userName:"",//用户名
+            passwordForm:{
+                managerOldPassword:"", //旧密码
+                managerPassword:"", //新密码
+                managerNewPassword:"", //确认新密码
+            },
+            rules: {
+                managerOldPassword: [
+                    { required: true, message: '请输入原密码', trigger: 'blur' },
+                    { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+                ],
+                managerPassword: [
+                    { required: true, message: '请输入新密码', trigger: 'blur' },
+                    { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+                ],
+                managerNewPassword: [
+                    { required: true, message: '请输入确认新密码', trigger: 'blur' },
+                    { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+                ],
+            }
         },
         watch:{
             menuList:function (n,o) {
@@ -99,12 +137,56 @@
                 this.isCollapse = indexVue.isCollapse
             },
             //修改密码
-            openInfo: function(){
+            changePassword: function(){
+                var that = this;
+                this.$refs.passwordForm.validate((valid) => {
+                    if (valid) {
+                        if (that.passwordForm.managerPassword != that.passwordForm.managerNewPassword){
+                            that.$message.error("确认新密码和新密码不一致");
+                            return ;
+                        }
+                        axios.post("${request.contextPath}/manager/changePassword.do",
+                            Qs.stringify(that.passwordForm),{ headers:{'Content-Type':'application/x-www-form-urlencoded'}}
+                        ).then(
+                            function (data) {
+                                if (data.code== 1){
+                                    that.$message.success("修改成功");
+                                    window.location.href = "${request.contextPath}/login.do";
+                                }else{
+                                    that.$message.error(data.msg);
+                                }
+                            }
+                        )
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
 
             },
             //退出登录
             userQuit:function(){
-
+                this.$confirm('确认退出?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios({
+                        method: 'get',
+                        url: '${request.contextPath}/manager/quit.do',
+                    }).then(
+                        function (data) {
+                            if (data.code == 1){
+                                window.location.href = "${request.contextPath}/login.do"
+                            }
+                        }
+                    )
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
             },
             //打开iframe
             openIframe:function(url){
@@ -133,9 +215,24 @@
                 })
                 return result;
             },
+            getUser:function () {
+                var that = this;
+                axios({
+                    method: 'get',
+                    url: '${request.contextPath}/manager/info.do',
+                }).then(
+                    function (data) {
+                        if (data.code == 1){
+                            that.userName = data.data.managerName
+
+                        }
+                    }
+                )
+            }
         },
         mounted(){
             this.getMemuList();
+            this.getUser();
             this.openIframe('main');
         }
     })

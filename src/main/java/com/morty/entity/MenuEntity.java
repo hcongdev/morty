@@ -29,6 +29,8 @@ public class MenuEntity {
 
     private int menuOrder;
 
+    private String menuParentName;
+
     @TableField(exist = false)
     private List<MenuEntity> children;
 }

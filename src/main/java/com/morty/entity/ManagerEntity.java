@@ -58,4 +58,10 @@ public class ManagerEntity {
     @TableField(exist=false)
     private List<Integer> roleIdList;
 
+    /**
+     * 角色ID列表
+     */
+    @TableField(exist=false)
+    private String managerOldPassword;
+
 }

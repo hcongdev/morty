@@ -12,6 +12,7 @@
         <result property="menuPerms" column="menu_perms"></result>
         <result property="menuType" column="menu_type"></result>
         <result property="menuUrl" column="menu_url"></result>
+        <result property="menuParentName" column="menu_parent_name"></result>
     </resultMap>
     <delete id="delete" >
         delete from menu

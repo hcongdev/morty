@@ -1,14 +1,20 @@
 package com.morty.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.common.entity.Result;
+import com.common.util.UserUtil;
 import com.morty.entity.ManagerEntity;
 import com.morty.service.ManagerRoleService;
 import com.morty.service.ManagerService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -87,5 +93,52 @@ public class ManagerController {
         }
         return Result.success();
 
+    }
+
+    /**
+     * 退出登录
+     */
+    @GetMapping("/quit")
+    @ResponseBody
+    public Result quit(){
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return Result.success();
+    }
+
+    /**
+     * 获取登录用户信息
+     */
+    @GetMapping("/info")
+    @ResponseBody
+    public Result info(HttpServletRequest request){
+        ManagerEntity _manager = UserUtil.getManagerSession(request.getSession());
+        return Result.success(_manager);
+    }
+
+    /**
+     * 退出登录
+     */
+    @PostMapping("/changePassword")
+    @ResponseBody
+    public Result changePassword(@ModelAttribute ManagerEntity managerEntity, HttpServletRequest request){
+        if (StrUtil.isBlank(managerEntity.getManagerPassword())){
+            return Result.failure("用户密码不能为空");
+        }
+        if (StrUtil.length(managerEntity.getManagerPassword()) < 4 || StrUtil.length(managerEntity.getManagerPassword()) > 30){
+            return Result.failure("用户密码长度在6-30之间");
+        }
+        // 验证新密码的合法：空格字符
+        if (managerEntity.getManagerPassword().contains(" ")) {
+            return Result.failure("用户密码长度不能包含空格");
+        }
+        ManagerEntity _manager = UserUtil.getManagerSession(request.getSession());
+        // 将用户输入的原始密码用MD5加密再和数据库中的进行比对
+        if ( !_manager.getManagerPassword().equals(SecureUtil.md5(managerEntity.getManagerOldPassword()))){
+            return Result.failure("用户密码错误");
+        }
+        _manager.setManagerPassword(managerEntity.getManagerPassword());
+        managerService.updateManager(_manager);
+        return Result.success();
     }
 }

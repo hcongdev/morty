@@ -36,7 +36,7 @@
         select * from role
         <where>
             <if test="roleId &gt; 0">role_id=#{roleId} </if>
-            <if test="roleName != null and roleName != ''"> and role_name=#{roleName} </if>
+            <if test="roleName != null and roleName != ''"> and role_name like concat('%',#{roleName},'%')</if>
             <if test="roleManagerId &gt; 0"> and role_manager_id=#{roleManagerId} </if>
         </where>
     </select>

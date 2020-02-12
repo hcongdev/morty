@@ -13,10 +13,12 @@
                     <#if shiro.hasPermission("menu:save")>
                         <el-button type="info" icon="el-icon-plus" @click="save">新增</el-button>
                     </#if>
-                    <#if shiro.hasPermission("menu:teas")>
+                    <#if shiro.hasPermission("menu:update")>
                     <el-button type="info" class="el-icon-edit" @click="update">修改</el-button>
                     </#if>
+                    <#if shiro.hasPermission("menu:del")>
                     <el-button type="danger" class="el-icon-delete" @click="del">删除</el-button>
+                    </#if>
                 </el-row>
 
             </el-header>
