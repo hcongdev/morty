@@ -12,7 +12,7 @@
             <el-header class="main-header">
                 <div class="main-header-title item">
                     <span v-if="isCollapse">Morty</span>
-                    <span v-if="!isCollapse" style="width: 175px;">MortyMorty</span>
+                    <span v-if="!isCollapse" style="width: 175px;">欢迎使用</span>
                 </div>
 
                 <div class="item" @click="collapse" style="margin: 10px 0;">
@@ -36,9 +36,9 @@
 
 
             <el-container>
-                <el-aside :class="[isCollapse ? 'collapseLength' :'nocollapseLength'] " style="min-height: 743px;">
                 <!--侧边导航开始-->
                      <el-menu
+                             style="height: 100vh;"
                              default-active="2"
                              class="el-menu-vertical-demo"
                              @open="handleOpen"
@@ -55,15 +55,14 @@
                              </template>
                              <!-- 子菜单 -->
                              <el-menu-item :index="sub.menuId+''" :data-index="sub.menuId" v-for="(sub,index) in getSubMenu(menu.menuId)"
-                                           :key='sub.menuId' v-text="sub.menuName" @click.self='openIframe(sub.menuUrl)'></el-menu-item>
+                                           :key='sub.menuId' v-text="sub.menuName" @click.self='openIframe(sub.menuUrl);menuName=menu.menuName'></el-menu-item>
                          </el-submenu>
                      </el-menu>
-                 </el-aside>
                  <!-- 侧边导航结束-->
 
                 <el-container>
-                    <el-header class="container-header">
-                        标题
+                    <el-header class="container-header" style="padding: 5px 0px 0px 10px;">
+                        {{menuName}}
                     </el-header>
                     <el-main>
                         <iframe class="iframe-class" :src="url"></iframe>
@@ -84,7 +83,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="changeFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="changePassword">确 定</el-button>
             </div>
         </el-dialog>
@@ -102,6 +101,7 @@
             subMenuList:[], //二级菜单
             changeFormVisible: false, //修改密码弹窗
             userName:"",//用户名
+            menuName:"主界面",//菜单名
             passwordForm:{
                 managerOldPassword:"", //旧密码
                 managerPassword:"", //新密码
