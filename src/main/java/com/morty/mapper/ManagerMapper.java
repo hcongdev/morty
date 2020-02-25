@@ -28,4 +28,6 @@ public interface ManagerMapper extends BaseMapper<ManagerEntity> {
     List<ManagerEntity> queryByEntity(ManagerEntity managerEntity);
 
     void save(ManagerEntity managerEntity);
+
+    void delete(int[] ids);
 }

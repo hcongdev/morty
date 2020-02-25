@@ -49,7 +49,7 @@ public class ModelerController {
      */
     @GetMapping("/create")
     @ResponseBody
-    public Result newModel(@PathVariable("key")String key,@PathVariable("name")String name,@PathVariable("description")String description) throws UnsupportedEncodingException {
+    public Result newModel(@RequestParam("key")String key,@RequestParam("name")String name,@RequestParam("description")String description) throws UnsupportedEncodingException {
 //        RepositoryService repositoryService = processEngine.getRepositoryService();
         //初始化一个空模型
         Model model = repositoryService.newModel();

@@ -60,4 +60,9 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper,ManagerEntity>
     public List<String> queryAllPerms(int managerId) {
         return managerMapper.queryAllPerms(managerId);
     }
+
+    @Override
+    public void deleteIds(int[] ids) {
+        this.getBaseMapper().delete(ids);
+    }
 }

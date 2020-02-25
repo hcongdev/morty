@@ -29,4 +29,10 @@ public interface ManagerService extends IService<ManagerEntity> {
      * @param managerId  用户ID
      */
     List<String> queryAllPerms(int managerId);
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    void deleteIds(int[] ids);
 }

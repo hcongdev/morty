@@ -53,4 +53,11 @@
             WHERE mr.manager_id = #{managerId}
     </select>
     <select id="list" resultType="com.morty.entity.ManagerEntity"></select>
+    <delete id="delete" >
+        delete from manager
+        <where>
+            manager_id  in <foreach collection="array" item="item" index="index"
+                                 open="(" separator="," close=")">#{item}</foreach>
+        </where>
+    </delete>
 </mapper>

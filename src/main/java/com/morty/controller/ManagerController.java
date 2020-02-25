@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -66,6 +67,17 @@ public class ManagerController {
     public Result update(@ModelAttribute ManagerEntity managerEntity){
         verifyForm(managerEntity);
         managerService.updateManager(managerEntity);
+        return Result.success();
+    }
+
+    @PostMapping("/del")
+    @ResponseBody
+    public Result del(@RequestBody List<ManagerEntity> managers){
+        int[] ids = new int[managers.size()];
+        for(int i = 0;i<managers.size();i++){
+            ids[i] =managers.get(i).getManagerId();
+        }
+        managerService.deleteIds(ids);
         return Result.success();
     }
 

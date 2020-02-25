@@ -80,7 +80,8 @@
         },
         methods: {
             open:function(){
-              this.isShow = true;
+                this.isShow = true;
+                this.$refs.modelForm.resetFields();
             },
             //加载模型
             getModelList:function (){
@@ -98,9 +99,11 @@
                 axios({
                     method: 'get',
                     url: '${request.contextPath}/models/create.do',
+                    params: {key:that.modelForm.key,name:that.modelForm.name,description:that.modelForm.description},
                 }).then(function (data) {
                     if(data.code == 1){
                         that.getModelList();
+                        that.isShow = false;
                     }
                 })
             },
